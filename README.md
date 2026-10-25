@@ -41,12 +41,14 @@ flowchart LR
 │   ├── container/startup/   Run on every container start (none yet)
 │   ├── bootstrap/           Schema owner, deployment account, documents tablespace (SYSDBA)
 │   ├── changelog/           Liquibase changelogs: domains, tables, ...
-│   └── tools/               liquibase.sh, run inside the container
+│   ├── tests/               Database tests (*_test.sql) and their runner
+│   └── tools/               liquibase.sh and sql-session.sh, run inside the container
 ├── scripts/
 │   ├── init-secrets.sh      Creates random passwords in ./secrets/ (gitignored)
 │   ├── db-bootstrap.sh      Runs the bootstrap inside the container
 │   ├── db-migrate.sh        Runs Liquibase (status, update, history, rollback) inside the container
-│   └── db-sql.sh            Opens an interactive SQLcl session (no password to type)
+│   ├── db-sql.sh            Opens an interactive SQLcl session (no password to type)
+│   └── db-test.sh           Runs the database tests
 ├── legacy/desktop-pyqt6/    Frozen v1 desktop app (reference only), with screenshots
 ├── CONTRIBUTING.md          Workflow, commit messages, code style, secrets rule
 └── (planned) backend/  frontend/
@@ -84,6 +86,7 @@ What you get: Oracle AI Database 26ai Free with every tablespace encrypted (TDE)
 | Apply pending changes | `./scripts/db-migrate.sh update` |
 | What has been applied | `./scripts/db-migrate.sh history` |
 | Undo the last change | `./scripts/db-migrate.sh rollback-count 1` |
+| Run the database tests (good and bad data, rolled back) | `./scripts/db-test.sh` |
 | Re-create / re-sync accounts and storage (safe to repeat) | `./scripts/db-bootstrap.sh` |
 
 | Task | Command |
@@ -105,7 +108,8 @@ Optional settings (port, recovery-area size, image) go in a `.env` file; see `.e
 - [x] Restructure the repository and add tooling
 - [x] Oracle 26ai Free in Docker: TDE on every tablespace, ARCHIVELOG, Fast Recovery Area, WELBANK PDB
 - [x] Schema migrations with Liquibase; schema-only owner; SQL domains and reference tables
-- [ ] Schema v2 Tier 1: people and KYC, accounts and ledger, loans, cards, approvals
+- [x] People and KYC: employees, customers, Ghana Card verification records, addresses, contacts, next of kin, photos and signatures; automated database tests
+- [ ] Accounts and ledger, loans, cards, approvals
 - [ ] PL/SQL business packages and their tests
 - [ ] Seed data mirroring Ghana's population
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE

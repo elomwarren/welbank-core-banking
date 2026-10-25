@@ -14,6 +14,7 @@ This activates the checks in `.pre-commit-config.yaml` so they run before every 
 
 - Work happens on `main`. There are no long-lived branches.
 - A commit is made only when a piece of work is **finished and checked**: it builds, its tests pass, and its docs are updated.
+- If `database/` changed: apply it (`./scripts/db-migrate.sh update`) and run `./scripts/db-test.sh`; both must succeed.
 - Before committing, review what will go in:
 
   ```bash

@@ -16,7 +16,13 @@ database/
 ├── changelog/        Liquibase changelogs: every schema object, in order
 │   ├── controller.xml            The master list of files, in apply order
 │   ├── 0001_domains.sql          SQL domains (email, phone, Ghana Card, money, ...)
-│   └── 0002_reference_tables.sql Regions, branches, departments, jobs, currencies, products, limits
+│   ├── 0002_reference_tables.sql Regions, branches, departments, jobs, currencies, products, limits
+│   ├── 0003_people.sql           Countries, employees
+│   └── 0004_customers_kyc.sql    Customers and KYC: identity documents and verifications, addresses,
+│                                 contacts, next of kin, photo / signature / proof-of-address files
+├── tests/            Database tests: good rows must be accepted, bad rows rejected
+│   ├── run_tests.sh              Runs every *_test.sql as SYSDBA in WELBANK, adds up the results
+│   └── NNNN_*_test.sql           One file per changelog area, rolled back at the end
 └── tools/
     ├── liquibase.sh   Runs one Liquibase command through SQLcl, as WB_DEPLOY[WELBANK]
     └── sql-session.sh Opens an interactive SQLcl session (SYSDBA in WELBANK or root, or WB_DEPLOY[WELBANK])
@@ -26,6 +32,7 @@ database/
 
 | Command (from the repo root) | What it does |
 |---|---|
+| `./scripts/db-test.sh` | Runs the database tests; exit code 0 only if every check passes |
 | `./scripts/db-sql.sh` | Interactive SQLcl as SYSDBA inside WELBANK; `root` for CDB$ROOT; `deploy` to act as WELBANK. No password to type |
 | `./scripts/db-bootstrap.sh` | Creates or re-syncs the schema owner, the deployment account and the documents tablespace |
 | `./scripts/db-migrate.sh status` | Lists schema changes not applied yet |
@@ -46,5 +53,6 @@ database/
 ## Rules for changelogs
 
 - Never edit a changeset that has been applied: add a new one. Liquibase checksums every applied changeset and stops if one changed.
-- Every changeset has a `--rollback`.
+- Every changeset has a `--rollback`. PL/SQL changesets (triggers, packages) add `endDelimiter:/` and end with `/`.
+- Every new changelog file comes with a test file in `tests/`; run `./scripts/db-test.sh` before committing.
 - Liquibase records what it applied in `WELBANK.DATABASECHANGELOG`.
