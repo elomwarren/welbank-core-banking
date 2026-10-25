@@ -1,0 +1,101 @@
+# compose.yaml — runs the WEL Bank database (Oracle AI Database 26ai Free) in Docker.
+#
+#   First time:   ./scripts/init-secrets.sh && docker compose up -d
+#   Watch:        docker compose logs -f db      (wait for "DATABASE IS READY TO USE!")
+#   Stop:         docker compose stop            (clean SHUTDOWN IMMEDIATE)
+#   Start again:  docker compose start
+#   Delete ALL:   docker compose down -v         (destroys the database and its backups!)
+#
+# Optional settings (port, recovery-area size, image) can be overridden in a .env file;
+# see .env.example. Passwords never go in .env: they live in ./secrets/ (gitignored).
+
+name: welbank
+
+services:
+  # One-shot helper: new Docker volumes are owned by root, but the database runs as the
+  # "oracle" user (uid 54321). This gives the two volumes to oracle, then exits.
+  volume-permissions:
+    image: ${ORACLE_IMAGE:-container-registry.oracle.com/database/free@sha256:f988b0c04c4c386cd306a2a914c0d7a9702d83acc31b064a28ad8eb6278a8fba}
+    user: "0:0"
+    entrypoint: ["chown", "54321:54321", "/opt/oracle/oradata", "/opt/oracle/fra"]
+    volumes:
+      - type: volume
+        source: oradata
+        target: /opt/oracle/oradata
+        volume:
+          nocopy: true
+      - type: volume
+        source: fra
+        target: /opt/oracle/fra
+    restart: "no"
+
+  db:
+    # Pinned by digest = Oracle AI Database 26ai Free 23.26.3 (pulled 2026-10-25), so a newer
+    # "latest" can never change the database underneath us. Update deliberately, not by accident.
+    image: ${ORACLE_IMAGE:-container-registry.oracle.com/database/free@sha256:f988b0c04c4c386cd306a2a914c0d7a9702d83acc31b064a28ad8eb6278a8fba}
+    container_name: welbank-db
+    hostname: welbank-db          # must not contain "_" (Oracle listener restriction)
+    depends_on:
+      volume-permissions:
+        condition: service_completed_successfully
+
+    # Reachable from this laptop only. Publishing "1521:1521" would expose the database to the
+    # whole network, and Docker's firewall rules bypass the host firewall.
+    ports:
+      - "127.0.0.1:${ORACLE_PORT:-1521}:1521"
+
+    environment:
+      ORACLE_CHARACTERSET: AL32UTF8
+      # Transparent Data Encryption: create a keystore and encrypt every tablespace at creation.
+      # (The image uses the SYS password for the keystore too; see docs on changing it.)
+      CONFIGURE_TDE: "true"
+      ENCRYPT_TABLESPACES: ALL
+      # Required for online backups and point-in-time recovery (RMAN).
+      ENABLE_ARCHIVELOG: "true"
+      ENABLE_FORCE_LOGGING: "true"
+      # Read by our setup script 01_recovery_area.sh.
+      WELBANK_FRA_SIZE: ${FRA_SIZE:-20G}
+
+    # The SYS / SYSTEM / PDBADMIN (and TDE keystore) password, read by the image from
+    # /run/secrets/oracle_pwd. Never put it in "environment": env vars show in `docker inspect`.
+    secrets:
+      - oracle_pwd
+
+    volumes:
+      # nocopy: start from an EMPTY volume so the image builds a fresh database. Without it,
+      # Docker copies the image's pre-built database in, and TDE + setup scripts never run.
+      - type: volume
+        source: oradata
+        target: /opt/oracle/oradata
+        volume:
+          nocopy: true
+      # Fast Recovery Area on its own volume: archived logs, RMAN backups, flashback logs.
+      - type: volume
+        source: fra
+        target: /opt/oracle/fra
+      # Our scripts: "setup" runs once after the database is created, "startup" on every start.
+      - ./database/container/setup:/opt/oracle/scripts/setup:ro
+      - ./database/container/startup:/opt/oracle/scripts/startup:ro
+
+    # The image's own health check, but only once the database is fully created (the image
+    # writes .FREE.created when it is). The check connects as SYSDBA, and while the database is
+    # being built an extra session breaks steps that need exclusive access (ORA-12721).
+    # The long start period stops the first 10-20 minute build being reported "unhealthy".
+    healthcheck:
+      test: ["CMD-SHELL", 'test -f "$${ORACLE_BASE}/oradata/.$${ORACLE_SID}.created" && "$${SCRIPT_BASE_DIR}/$${CHECK_DB_FILE}" > /dev/null || exit 1']
+      start_period: 30m
+      interval: 30s
+      timeout: 30s
+      retries: 5
+
+    # On `docker compose stop`, the image runs SHUTDOWN IMMEDIATE. Docker's default 10 s would
+    # kill it half-way (effectively SHUTDOWN ABORT), so allow enough time.
+    stop_grace_period: 2m
+
+volumes:
+  oradata:
+  fra:
+
+secrets:
+  oracle_pwd:
+    file: ./secrets/oracle_pwd.txt

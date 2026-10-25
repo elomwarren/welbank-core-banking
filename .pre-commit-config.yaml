@@ -37,6 +37,13 @@ repos:
         args: ["--fix"]
       - id: ruff-format
 
+  # Shell script lint: catches quoting mistakes, unset variables and other common bash bugs.
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1-1
+    hooks:
+      - id: shellcheck
+        exclude: ^legacy/
+
   # Secret scanning of the staged changes. Uses the gitleaks installed on your
   # machine (sudo pacman -S gitleaks), so it is fast and works offline.
   - repo: local

@@ -34,9 +34,17 @@ flowchart LR
 
 ```text
 .
+├── compose.yaml             The database container (Oracle 26ai Free) and its volumes
+├── .env.example             Optional, non-secret settings for compose.yaml
+├── database/
+│   └── container/
+│       ├── setup/           Run once when the database is created (FRA, WELBANK PDB)
+│       └── startup/         Run on every container start (none yet)
+├── scripts/
+│   └── init-secrets.sh      Creates random passwords in ./secrets/ (gitignored)
 ├── legacy/desktop-pyqt6/    Frozen v1 desktop app (reference only), with screenshots
 ├── CONTRIBUTING.md          Workflow, commit messages, code style, secrets rule
-└── (planned) database/  backend/  frontend/  docker-compose.yml
+└── (planned) backend/  frontend/
 ```
 
 ## Documentation
@@ -50,18 +58,42 @@ This repository holds the code, configuration and scripts. The detailed project 
 
 ## Getting started
 
-Setup instructions arrive with the Docker step. Prerequisites: Docker, Node.js 24 LTS, `uv`, `pre-commit` and `gitleaks`.
+Prerequisites: Docker with Compose, `pre-commit` and `gitleaks` (Node.js 24 LTS and `uv` come into play with the backend and frontend).
+
+```bash
+git clone https://github.com/elomwarren/welbank-core-banking.git
+cd welbank-core-banking
+pre-commit install            # activate the checks that run before each commit
+./scripts/init-secrets.sh     # create random passwords in ./secrets/ (never committed)
+docker compose up -d          # start the database
+docker compose logs -f db     # first start builds the database (10-20 min); wait for "DATABASE IS READY TO USE!"
+```
+
+What you get: Oracle AI Database 26ai Free with every tablespace encrypted (TDE), ARCHIVELOG mode, a Fast Recovery Area on its own volume, and the `WELBANK` pluggable database. It listens on `127.0.0.1:1521` only.
+
+| Task | Command |
+|---|---|
+| SQL*Plus as SYSDBA (no password, inside the container) | `docker exec -it welbank-db sqlplus / as sysdba` |
+| Connect to WELBANK from your laptop | service name `WELBANK` on `localhost:1521` |
+| Stop cleanly (SHUTDOWN IMMEDIATE) | `docker compose stop` |
+| Start again | `docker compose start` |
+| Status and health | `docker compose ps` |
+| Delete everything, including backups | `docker compose down -v` |
+
+Optional settings (port, recovery-area size, image) go in a `.env` file; see `.env.example`.
 
 ## Roadmap
 
 - [x] Review the legacy app and document its limitations
 - [x] Design schema v2 (staff side, Tier 1)
 - [x] Restructure the repository and add tooling
-- [ ] Oracle 26ai Free in Docker, schema v2 Tier 1, seed data
+- [x] Oracle 26ai Free in Docker: TDE on every tablespace, ARCHIVELOG, Fast Recovery Area, WELBANK PDB
+- [ ] Schema v2 Tier 1 and seed data
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE
 - [ ] Backup and recovery: RMAN, scheduler jobs, practised restore
 - [ ] FastAPI backend
 - [ ] SvelteKit frontend
+- [ ] Production deployment on a dedicated server (HTTPS, no database port exposed, off-server backups)
 - [ ] Customer portal (phase 3)
 
 ## Author
