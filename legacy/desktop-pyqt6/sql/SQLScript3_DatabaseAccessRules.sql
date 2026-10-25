@@ -5,8 +5,8 @@
 ---------------------------------- CUSTOMER SERVICE employees
 
 -- USER CREATION
-create user kwameowusu identified by 12345; -- CREATE CUSTOMER SERVICE department USER -- eg. Kwame Owusu (as sysdba)
-create user cs identified by 12345; -- general user of CUSTOMER SERVICE
+create user kwameowusu identified by "&password"; -- CREATE CUSTOMER SERVICE department USER -- eg. Kwame Owusu (as sysdba)
+create user cs identified by "&password"; -- general user of CUSTOMER SERVICE
 
 -- CUSTOMER SERVICE ROLE
 create role CUSTOMER_SERVICE;
@@ -27,8 +27,8 @@ grant CUSTOMER_SERVICE to kwameowusu;
 ---------------------------------- HUMAN RESOURCES employees
 
 -- USER CREATION 
-create user kwadwohanson identified by 12345; -- CREATE HUMAN RESOURCES department USER (as sysdba) -- eg. Kwadwo Hanson
-create user hr identified by 12345;
+create user kwadwohanson identified by "&password"; -- CREATE HUMAN RESOURCES department USER (as sysdba) -- eg. Kwadwo Hanson
+create user hr identified by "&password";
 
 -- HUMAN RESOURCES ROLE
 create role HUMAN_RESOURCES;

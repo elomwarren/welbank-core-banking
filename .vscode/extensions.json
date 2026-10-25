@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "svelte.svelte-vscode",
+    "ms-azuretools.vscode-docker",
+    "oracle.sql-developer",
+    "editorconfig.editorconfig"
+  ]
+}

@@ -1,23 +1,68 @@
-# ignore license file
-license.txt
+# .gitignore — files git must never track.
+# Rule of thumb: ignore anything that is generated, machine-specific or secret.
 
-# ignore __pycache__ folder
+# --- Secrets (see CONTRIBUTING.md: nothing secret is ever committed) --------
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.sso
+*.jks
+# Oracle TDE keystore / wallet files
+ewallet.p12
+cwallet.sso
+wallet/
+
+# --- Oracle data and backups (live in Docker volumes, never in git) --------
+oradata/
+fra/
+backups/
+*.dmp
+*.bkp
+*.dbf
+*.ctl
+*.arc
+
+# --- Python --------------------------------------------------------------
 __pycache__/
-
-# ignore db 
-*.db
-
-# ignore json file
-*.json
-
-# folders
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+dist/
 build/
 
-# ignore spec file
-*.spec
+# --- Node / SvelteKit ----------------------------------------------------
+node_modules/
+.svelte-kit/
+.vite/
+frontend/build/
 
-# some dir in dist/
-dist/
+# --- Legacy desktop app (local runtime files) ------------------------------
+legacy/desktop-pyqt6/config.ini
+legacy/desktop-pyqt6/data/
+legacy/desktop-pyqt6/*.spec
 
-# data dir
-data/
+# --- Editors and operating systems ---------------------------------------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# --- Logs ----------------------------------------------------------------
+*.log
+logs/

@@ -1,0 +1,19 @@
+# .gitattributes — how git treats file contents.
+
+# Store text files with LF line endings in the repository, whatever OS edits them.
+* text=auto eol=lf
+
+# Shell scripts must be LF even on Windows checkouts, or they fail inside Linux containers.
+*.sh  text eol=lf
+*.sql text eol=lf
+
+# Binary files: never convert, never diff as text.
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary
+*.zip binary
+
+# Frozen legacy app: keep every file byte-for-byte as it was in v1
+# (some files have Windows CRLF line endings; converting them would hide the move in git history).
+legacy/** -text

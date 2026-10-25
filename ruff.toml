@@ -1,0 +1,28 @@
+# Ruff — Python linter and formatter (https://docs.astral.sh/ruff/).
+# Repo-wide defaults; the backend can extend these in its own pyproject.toml.
+
+target-version = "py313"
+line-length = 100
+
+# Never lint or reformat the frozen legacy app.
+extend-exclude = ["legacy"]
+# Apply the exclusion even when pre-commit passes file names explicitly.
+force-exclude = true
+
+[lint]
+select = [
+  "E", "W",  # pycodestyle: basic style errors
+  "F",       # Pyflakes: unused imports, undefined names
+  "I",       # isort: sorted imports
+  "B",       # flake8-bugbear: likely bugs
+  "UP",      # pyupgrade: modern Python syntax
+  "S",       # flake8-bandit: security smells (e.g. SQL built from strings)
+  "D",       # pydocstyle: docstrings required
+]
+
+[lint.pydocstyle]
+convention = "google"
+
+[lint.per-file-ignores]
+# Tests may use assert and skip docstrings.
+"**/tests/**" = ["S101", "D"]

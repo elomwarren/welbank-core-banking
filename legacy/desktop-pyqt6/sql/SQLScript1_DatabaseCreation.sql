@@ -3,7 +3,7 @@
 
 -- using DBCA (Database Configuration Assistant) THEN
 -- Create user <welbank> in Pluggable Database <WELBANK>
-create user welbank identified by 12345;
+create user welbank identified by "&password";
 -- and grant privileges to that user
 grant all privileges to welbank;
 
@@ -11,7 +11,7 @@ grant all privileges to welbank;
 -- using following command:
 create pluggable database WELBANK
 -- USER CREATION
-admin user welbank identified by 12345
+admin user welbank identified by "&password"
 -- FILE LOCATION
 file_name_convert = ('/opt/oracle/oradata/XE/pdbseed/', '/opt/oracle/oradata/XE/welbank/')
 -- TABLESPACE CREATION 
@@ -28,7 +28,7 @@ grant all privileges to welbank;
 -- Connect to the <WELBANK> database with USER <welbank> to run the following script (using SQLPLUS, SQL Developer or any other tool)
 
 -- connection string using SQLPLUS
-conn welbank/12345@localhost:1521/welbank 
+conn welbank@localhost:1521/welbank 
 
 ------------------- DATABASE CREATION SCRIPT -------------------
 

@@ -1,0 +1,48 @@
+# pre-commit — checks that run automatically before every `git commit`.
+# https://pre-commit.com
+#
+#   Activate once per clone:   pre-commit install
+#   Run on every file:         pre-commit run --all-files
+#   Update hook versions:      pre-commit autoupdate
+#
+# If a hook fails, the commit is stopped. Hooks marked "fixes" correct the files
+# themselves: review the changes, `git add` them, and commit again.
+
+repos:
+  # General file hygiene.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files   # blocks files over 1 MB (use Docker volumes / releases instead)
+        args: ["--maxkb=1024"]
+      - id: check-merge-conflict      # blocks leftover <<<<<<< markers
+      - id: check-case-conflict       # blocks names that clash on case-insensitive disks
+      - id: check-yaml
+      - id: check-toml
+      - id: detect-private-key        # blocks committed private keys
+      - id: end-of-file-fixer         # fixes: exactly one newline at end of file
+        exclude: ^legacy/
+      - id: trailing-whitespace       # fixes: strips trailing spaces
+        exclude: ^legacy/
+        args: ["--markdown-linebreak-ext=md"]
+      - id: mixed-line-ending         # fixes: converts CRLF to LF
+        exclude: ^legacy/
+        args: ["--fix=lf"]
+
+  # Python lint + format (configuration in ruff.toml).
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.2
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
+
+  # Secret scanning of the staged changes. Uses the gitleaks installed on your
+  # machine (sudo pacman -S gitleaks), so it is fast and works offline.
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: gitleaks (secret scan of staged changes)
+        entry: gitleaks git --pre-commit --staged --redact --verbose
+        language: system
+        pass_filenames: false
