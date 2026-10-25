@@ -18,7 +18,8 @@
 # =============================================================================
 
 # Sourced by the image's start-up script: run in a subshell so `exit` / `set -e`
-# cannot stop the container's own script.
+# cannot stop the container's own script. The exit code is checked on a separate
+# line (see 01_recovery_area.sh for why `( ... ) || echo ERROR` is wrong).
 (
   set -euo pipefail
 
@@ -87,4 +88,8 @@ ALTER USER welbank_pdbadmin ACCOUNT LOCK;
 SQL
 
   echo "[welbank] PDB WELBANK created, encrypted and open"
-) || echo "[welbank] ERROR: 02_welbank_pdb.sh failed (see the messages above)"
+)
+welbank_rc=$?
+if [[ $welbank_rc -ne 0 ]]; then
+  echo "[welbank] ERROR: 02_welbank_pdb.sh failed with exit code ${welbank_rc} (see the messages above)"
+fi

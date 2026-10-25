@@ -19,6 +19,8 @@ repos:
       - id: check-case-conflict       # blocks names that clash on case-insensitive disks
       - id: check-yaml
       - id: check-toml
+      - id: check-xml                 # Liquibase controller.xml
+      - id: check-executables-have-shebangs
       - id: detect-private-key        # blocks committed private keys
       - id: end-of-file-fixer         # fixes: exactly one newline at end of file
         exclude: ^legacy/

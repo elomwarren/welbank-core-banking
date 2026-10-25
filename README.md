@@ -36,12 +36,17 @@ flowchart LR
 .
 ├── compose.yaml             The database container (Oracle 26ai Free) and its volumes
 ├── .env.example             Optional, non-secret settings for compose.yaml
-├── database/
-│   └── container/
-│       ├── setup/           Run once when the database is created (FRA, WELBANK PDB)
-│       └── startup/         Run on every container start (none yet)
+├── database/                See database/README.md
+│   ├── container/setup/     Run once when the database is created (FRA, WELBANK PDB, bootstrap)
+│   ├── container/startup/   Run on every container start (none yet)
+│   ├── bootstrap/           Schema owner, deployment account, documents tablespace (SYSDBA)
+│   ├── changelog/           Liquibase changelogs: domains, tables, ...
+│   └── tools/               liquibase.sh, run inside the container
 ├── scripts/
-│   └── init-secrets.sh      Creates random passwords in ./secrets/ (gitignored)
+│   ├── init-secrets.sh      Creates random passwords in ./secrets/ (gitignored)
+│   ├── db-bootstrap.sh      Runs the bootstrap inside the container
+│   ├── db-migrate.sh        Runs Liquibase (status, update, history, rollback) inside the container
+│   └── db-sql.sh            Opens an interactive SQLcl session (no password to type)
 ├── legacy/desktop-pyqt6/    Frozen v1 desktop app (reference only), with screenshots
 ├── CONTRIBUTING.md          Workflow, commit messages, code style, secrets rule
 └── (planned) backend/  frontend/
@@ -66,13 +71,24 @@ cd welbank-core-banking
 pre-commit install            # activate the checks that run before each commit
 ./scripts/init-secrets.sh     # create random passwords in ./secrets/ (never committed)
 docker compose up -d          # start the database
-docker compose logs -f db     # first start builds the database (10-20 min); wait for "DATABASE IS READY TO USE!"
+docker compose logs -f db     # first start builds the database (about 7 min); wait for "DATABASE IS READY TO USE!"
+./scripts/db-migrate.sh update   # create the schema objects with Liquibase
 ```
 
-What you get: Oracle AI Database 26ai Free with every tablespace encrypted (TDE), ARCHIVELOG mode, a Fast Recovery Area on its own volume, and the `WELBANK` pluggable database. It listens on `127.0.0.1:1521` only.
+What you get: Oracle AI Database 26ai Free with every tablespace encrypted (TDE), ARCHIVELOG mode, a Fast Recovery Area on its own volume, and the `WELBANK` pluggable database. Its tables belong to `WELBANK`, a schema-only account that cannot log in; changes are applied by `WB_DEPLOY` through proxy authentication. It listens on `127.0.0.1:1521` only.
+
+| Schema task | Command |
+|---|---|
+| Changes not applied yet | `./scripts/db-migrate.sh status` |
+| Preview the SQL of pending changes | `./scripts/db-migrate.sh update-sql` |
+| Apply pending changes | `./scripts/db-migrate.sh update` |
+| What has been applied | `./scripts/db-migrate.sh history` |
+| Undo the last change | `./scripts/db-migrate.sh rollback-count 1` |
+| Re-create / re-sync accounts and storage (safe to repeat) | `./scripts/db-bootstrap.sh` |
 
 | Task | Command |
 |---|---|
+| Interactive SQL in WELBANK (SQLcl, no password to type) | `./scripts/db-sql.sh` (or `root`, or `deploy` to act as the schema owner) |
 | SQL*Plus as SYSDBA (no password, inside the container) | `docker exec -it welbank-db sqlplus / as sysdba` |
 | Connect to WELBANK from your laptop | service name `WELBANK` on `localhost:1521` |
 | Stop cleanly (SHUTDOWN IMMEDIATE) | `docker compose stop` |
@@ -88,7 +104,10 @@ Optional settings (port, recovery-area size, image) go in a `.env` file; see `.e
 - [x] Design schema v2 (staff side, Tier 1)
 - [x] Restructure the repository and add tooling
 - [x] Oracle 26ai Free in Docker: TDE on every tablespace, ARCHIVELOG, Fast Recovery Area, WELBANK PDB
-- [ ] Schema v2 Tier 1 and seed data
+- [x] Schema migrations with Liquibase; schema-only owner; SQL domains and reference tables
+- [ ] Schema v2 Tier 1: people and KYC, accounts and ledger, loans, cards, approvals
+- [ ] PL/SQL business packages and their tests
+- [ ] Seed data mirroring Ghana's population
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE
 - [ ] Backup and recovery: RMAN, scheduler jobs, practised restore
 - [ ] FastAPI backend

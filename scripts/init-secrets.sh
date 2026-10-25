@@ -39,4 +39,7 @@ create_secret() {
   echo "created:       $file"
 }
 
+# SYS / SYSTEM / PDBADMIN and the TDE keystore (read by the Oracle image).
 create_secret oracle_pwd
+# WB_DEPLOY, the account that applies schema changes by proxying into WELBANK.
+create_secret wb_deploy_pwd

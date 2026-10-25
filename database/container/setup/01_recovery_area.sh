@@ -13,6 +13,9 @@
 
 # This file is sourced by the image's start-up script, so the work runs in a
 # subshell: an `exit` or `set -e` failure here must not stop the container itself.
+# The exit code is checked on a separate line, NOT with `( ... ) || echo ERROR`:
+# bash silently disables `set -e` inside anything on the left of `||`, so that
+# form would carry on after a failure and print the success message anyway.
 (
   set -euo pipefail
   fra_size="${WELBANK_FRA_SIZE:-20G}"
@@ -29,4 +32,8 @@ ALTER SYSTEM ARCHIVE LOG CURRENT;
 SQL
 
   echo "[welbank] Fast Recovery Area configured"
-) || echo "[welbank] ERROR: 01_recovery_area.sh failed (see the messages above)"
+)
+welbank_rc=$?
+if [[ $welbank_rc -ne 0 ]]; then
+  echo "[welbank] ERROR: 01_recovery_area.sh failed with exit code ${welbank_rc} (see the messages above)"
+fi

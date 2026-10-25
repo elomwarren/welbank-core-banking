@@ -58,8 +58,10 @@ services:
 
     # The SYS / SYSTEM / PDBADMIN (and TDE keystore) password, read by the image from
     # /run/secrets/oracle_pwd. Never put it in "environment": env vars show in `docker inspect`.
+    # wb_deploy_pwd: the WB_DEPLOY account used by the bootstrap and Liquibase scripts.
     secrets:
       - oracle_pwd
+      - wb_deploy_pwd
 
     volumes:
       # nocopy: start from an EMPTY volume so the image builds a fresh database. Without it,
@@ -76,6 +78,8 @@ services:
       # Our scripts: "setup" runs once after the database is created, "startup" on every start.
       - ./database/container/setup:/opt/oracle/scripts/setup:ro
       - ./database/container/startup:/opt/oracle/scripts/startup:ro
+      # The whole database/ folder (bootstrap, Liquibase changelogs, tools), read-only.
+      - ./database:/opt/welbank/database:ro
 
     # The image's own health check, but only once the database is fully created (the image
     # writes .FREE.created when it is). The check connects as SYSDBA, and while the database is
@@ -99,3 +103,5 @@ volumes:
 secrets:
   oracle_pwd:
     file: ./secrets/oracle_pwd.txt
+  wb_deploy_pwd:
+    file: ./secrets/wb_deploy_pwd.txt
