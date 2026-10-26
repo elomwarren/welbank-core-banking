@@ -110,7 +110,7 @@ Optional settings (port, recovery-area size, image) go in a `.env` file; see `.e
 - [x] Schema migrations with Liquibase; schema-only owner; SQL domains and reference tables
 - [x] People and KYC: employees, customers, Ghana Card verification records, addresses, contacts, next of kin, photos and signatures; automated database tests
 - [x] Accounts and the double-entry ledger: joint holders, maker-checker, reversals; cross-table rules as SQL assertions, debits = credits checked at COMMIT
-- [ ] Loans, cards, approvals, audit trail
+- [x] Loans (Ghana Reference Rate pricing, Bank of Ghana classes), debit cards (no card numbers stored), maker-checker queue, immutable audit trail: the Tier 1 schema is complete
 - [ ] PL/SQL business packages and their tests
 - [ ] Seed data mirroring Ghana's population
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE

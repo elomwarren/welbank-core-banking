@@ -20,8 +20,10 @@ database/
 │   ├── 0003_people.sql           Countries, employees
 │   ├── 0004_customers_kyc.sql    Customers and KYC: identity documents and verifications, addresses,
 │   │                             contacts, next of kin, photo / signature / proof-of-address files
-│   └── 0005_accounts_ledger.sql  Accounts, account holders, transactions, ledger lines; SQL assertions;
-│                                 debits = credits checked at COMMIT (ON COMMIT materialized view)
+│   ├── 0005_accounts_ledger.sql  Accounts, account holders, transactions, ledger lines; SQL assertions;
+│   │                             debits = credits checked at COMMIT (ON COMMIT materialized view)
+│   └── 0006_loans_cards_control.sql  Loan classes, applications, loans, schedule, repayments; cards;
+│                                 approval requests (maker-checker); immutable audit trail
 ├── tests/            Database tests: good rows must be accepted, bad rows rejected
 │   ├── run_tests.sh              Runs every *_test.sql as SYSDBA in WELBANK, adds up the results
 │   ├── NNNN_*_test.sql           One file per changelog area, rolled back at the end
@@ -61,4 +63,5 @@ database/
 - Every new changelog file comes with a test file in `tests/`; run `./scripts/db-test.sh` before committing.
 - Rules on one row are CHECK constraints; rules across rows or tables are SQL assertions (`CREATE ASSERTION`, Oracle 23.26.1+). Assertions need NOT NULL join columns of identical types, and cannot use SUM or GROUP BY.
 - Never run `SET CONSTRAINTS ALL DEFERRED`: in 23.26.3 it also defers the NOT DEFERRABLE assertions until COMMIT. Defer a deferrable assertion by name instead.
+- `audit_trail` is an immutable table: rows can never be updated, nor deleted for five years, and **no column can ever be added**. Tests may insert into it only inside a transaction they roll back.
 - Liquibase records what it applied in `WELBANK.DATABASECHANGELOG`.

@@ -385,9 +385,14 @@ BEGIN
                   WHERE c.owner = m.owner AND c.table_name = m.mview_name
                     AND c.constraint_name = 'LEDGER_TXN_BALANCED_CK' AND c.status = 'ENABLED');
   check_that('debits = credits: ledger_txn_totals_mv refreshes FAST ON COMMIT and has ledger_txn_balanced_ck', v_count = 1);
+  -- Only this changelog's assertions: later changelogs add their own.
   SELECT COUNT(*) INTO v_count FROM dba_assertions
-   WHERE owner = 'WELBANK' AND status = 'ENABLED' AND validated = 'VALIDATED';
-  check_that('10 assertions enabled and validated (found ' || v_count || ')', v_count = 10);
+   WHERE owner = 'WELBANK' AND status = 'ENABLED' AND validated = 'VALIDATED'
+     AND assertion_name IN ('ACCOUNTS_PRIMARY_HOLDER_AS', 'ACCOUNT_HOLDERS_CLASS_AS', 'ACCOUNT_HOLDERS_SOLE_AS',
+                            'ACCOUNTS_JOINT_MANDATE_AS', 'ACCOUNTS_DEBIT_KYC_AS', 'ACCOUNTS_OVERDRAFT_PRODUCT_AS',
+                            'LEDGER_ENTRIES_CURRENCY_AS', 'LEDGER_ENTRIES_POSTED_AS', 'TRANSACTIONS_LINES_AS',
+                            'TRANSACTIONS_REVERSAL_AS');
+  check_that('the 10 assertions of changelog 0005 enabled and validated (found ' || v_count || ')', v_count = 10);
 
   DBMS_OUTPUT.PUT_LINE('RESULT: ' || passed || ' passed, ' || failed || ' failed');
   ROLLBACK;
