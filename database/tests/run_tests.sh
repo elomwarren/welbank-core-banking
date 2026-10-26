@@ -5,7 +5,9 @@
 # Runs INSIDE the database container, as the "oracle" user (called from the
 # host by scripts/db-test.sh). Each test file:
 #   - runs as SYSDBA inside the WELBANK pluggable database;
-#   - works in one transaction and rolls it back, leaving no data behind;
+#   - works in one transaction and rolls it back, leaving no data behind
+#     (except 0005_ledger_commit_test.sql, which must COMMIT to reach the
+#     debits = credits rule, then deletes its own rows);
 #   - prints PASS / FAIL lines and a final "RESULT: <p> passed, <f> failed".
 # Exit code: 0 only if every check of every file passed.
 # =============================================================================

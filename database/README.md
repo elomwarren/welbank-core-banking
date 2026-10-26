@@ -18,11 +18,15 @@ database/
 │   ├── 0001_domains.sql          SQL domains (email, phone, Ghana Card, money, ...)
 │   ├── 0002_reference_tables.sql Regions, branches, departments, jobs, currencies, products, limits
 │   ├── 0003_people.sql           Countries, employees
-│   └── 0004_customers_kyc.sql    Customers and KYC: identity documents and verifications, addresses,
-│                                 contacts, next of kin, photo / signature / proof-of-address files
+│   ├── 0004_customers_kyc.sql    Customers and KYC: identity documents and verifications, addresses,
+│   │                             contacts, next of kin, photo / signature / proof-of-address files
+│   └── 0005_accounts_ledger.sql  Accounts, account holders, transactions, ledger lines; SQL assertions;
+│                                 debits = credits checked at COMMIT (ON COMMIT materialized view)
 ├── tests/            Database tests: good rows must be accepted, bad rows rejected
 │   ├── run_tests.sh              Runs every *_test.sql as SYSDBA in WELBANK, adds up the results
-│   └── NNNN_*_test.sql           One file per changelog area, rolled back at the end
+│   ├── NNNN_*_test.sql           One file per changelog area, rolled back at the end
+│   └── 0005_ledger_commit_test.sql  The one file that COMMITs (the balance rule is checked at COMMIT);
+│                                 it deletes its rows afterwards
 └── tools/
     ├── liquibase.sh   Runs one Liquibase command through SQLcl, as WB_DEPLOY[WELBANK]
     └── sql-session.sh Opens an interactive SQLcl session (SYSDBA in WELBANK or root, or WB_DEPLOY[WELBANK])
@@ -55,4 +59,6 @@ database/
 - Never edit a changeset that has been applied: add a new one. Liquibase checksums every applied changeset and stops if one changed.
 - Every changeset has a `--rollback`. PL/SQL changesets (triggers, packages) add `endDelimiter:/` and end with `/`.
 - Every new changelog file comes with a test file in `tests/`; run `./scripts/db-test.sh` before committing.
+- Rules on one row are CHECK constraints; rules across rows or tables are SQL assertions (`CREATE ASSERTION`, Oracle 23.26.1+). Assertions need NOT NULL join columns of identical types, and cannot use SUM or GROUP BY.
+- Never run `SET CONSTRAINTS ALL DEFERRED`: in 23.26.3 it also defers the NOT DEFERRABLE assertions until COMMIT. Defer a deferrable assertion by name instead.
 - Liquibase records what it applied in `WELBANK.DATABASECHANGELOG`.

@@ -86,7 +86,7 @@ What you get: Oracle AI Database 26ai Free with every tablespace encrypted (TDE)
 | Apply pending changes | `./scripts/db-migrate.sh update` |
 | What has been applied | `./scripts/db-migrate.sh history` |
 | Undo the last change | `./scripts/db-migrate.sh rollback-count 1` |
-| Run the database tests (good and bad data, rolled back) | `./scripts/db-test.sh` |
+| Run the database tests (good and bad data, rolled back; the commit test cleans up after itself) | `./scripts/db-test.sh` |
 | Re-create / re-sync accounts and storage (safe to repeat) | `./scripts/db-bootstrap.sh` |
 
 | Task | Command |
@@ -109,7 +109,8 @@ Optional settings (port, recovery-area size, image) go in a `.env` file; see `.e
 - [x] Oracle 26ai Free in Docker: TDE on every tablespace, ARCHIVELOG, Fast Recovery Area, WELBANK PDB
 - [x] Schema migrations with Liquibase; schema-only owner; SQL domains and reference tables
 - [x] People and KYC: employees, customers, Ghana Card verification records, addresses, contacts, next of kin, photos and signatures; automated database tests
-- [ ] Accounts and ledger, loans, cards, approvals
+- [x] Accounts and the double-entry ledger: joint holders, maker-checker, reversals; cross-table rules as SQL assertions, debits = credits checked at COMMIT
+- [ ] Loans, cards, approvals, audit trail
 - [ ] PL/SQL business packages and their tests
 - [ ] Seed data mirroring Ghana's population
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE

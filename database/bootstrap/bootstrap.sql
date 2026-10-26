@@ -90,9 +90,12 @@ END;
 -- Storage quotas and the privileges needed to create its own objects.
 -- Re-granting an existing privilege is harmless, so these always run.
 -- CREATE SESSION is required even without a password: a proxy session runs as WELBANK.
+-- CREATE ASSERTION: SQL assertions (Oracle AI Database 23.26.1 and later), rules
+-- that span rows and tables, e.g. "every customer account has a primary holder".
 ALTER USER welbank QUOTA UNLIMITED ON welbank_data QUOTA UNLIMITED ON welbank_docs;
 GRANT CREATE SESSION, CREATE TABLE, CREATE VIEW, CREATE SEQUENCE, CREATE PROCEDURE,
-      CREATE TRIGGER, CREATE TYPE, CREATE SYNONYM, CREATE MATERIALIZED VIEW, CREATE DOMAIN
+      CREATE TRIGGER, CREATE TYPE, CREATE SYNONYM, CREATE MATERIALIZED VIEW, CREATE DOMAIN,
+      CREATE ASSERTION
    TO welbank;
 
 -- -----------------------------------------------------------------------------

@@ -19,5 +19,6 @@
   <include file="0002_reference_tables.sql" relativeToChangelogFile="true"/>
   <include file="0003_people.sql" relativeToChangelogFile="true"/>
   <include file="0004_customers_kyc.sql" relativeToChangelogFile="true"/>
+  <include file="0005_accounts_ledger.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
