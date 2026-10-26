@@ -25,13 +25,18 @@ database/
 │   ├── 0006_loans_cards_control.sql  Loan classes, applications, loans, schedule, repayments; cards;
 │   │                             approval requests (maker-checker); immutable audit trail
 │   ├── 0007_transaction_limits_by_job.sql  Posting limits per job instead of per Oracle role
+│   ├── 0008_bank_parameters.sql  Policy values (90-day KYC deferral, minimum age, review intervals)
 │   └── code/                     Packages and views (re-applied when their file changes):
 │       ├── pkg_errors_spec.sql       business error codes (-20001 ...) and named exceptions
 │       ├── pkg_session_*.sql         who is calling: the employee behind the session user
 │       ├── pkg_audit_*.sql           business events into the immutable audit_trail
+│       ├── pkg_params_*.sql          reads bank_parameters (no hard-coded policy values)
 │       ├── pkg_posting_*.sql         deposits, withdrawals, transfers, approvals, reversals
+│       ├── pkg_account_*.sql         account opening and approval, holders, debits follow KYC
+│       ├── pkg_customer_*.sql        registration, KYC data, NIA verifications, KYC approval
 │       ├── v_ledger_balance_check.sql  reconciliation: stored balances against the ledger
-│       └── v_account_statement.sql     statement lines with a running balance
+│       ├── v_account_statement.sql     statement lines with a running balance
+│       └── v_pending_approvals.sql     the checkers' queue of pending requests
 ├── tests/            Database tests: good rows must be accepted, bad rows rejected
 │   ├── run_tests.sh              Runs every *_test.sql as SYSDBA in WELBANK, adds up the results
 │   ├── NNNN_*_test.sql           One file per changelog area, rolled back at the end

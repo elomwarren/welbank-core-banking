@@ -56,6 +56,26 @@ CREATE OR REPLACE PACKAGE pkg_errors AS
   c_reason_required       CONSTANT PLS_INTEGER := -20017;  -- rejections and reversals must say why
   e_reason_required       EXCEPTION; PRAGMA EXCEPTION_INIT(e_reason_required, -20017);
 
+  -- Customers, KYC and account opening.
+  c_customer_not_found    CONSTANT PLS_INTEGER := -20018;
+  e_customer_not_found    EXCEPTION; PRAGMA EXCEPTION_INIT(e_customer_not_found, -20018);
+  c_underage              CONSTANT PLS_INTEGER := -20019;
+  e_underage              EXCEPTION; PRAGMA EXCEPTION_INIT(e_underage, -20019);
+  c_consent_required      CONSTANT PLS_INTEGER := -20020;  -- Data Protection Act, 2012 (Act 843)
+  e_consent_required      EXCEPTION; PRAGMA EXCEPTION_INIT(e_consent_required, -20020);
+  c_kyc_incomplete        CONSTANT PLS_INTEGER := -20021;  -- the message lists what is missing
+  e_kyc_incomplete        EXCEPTION; PRAGMA EXCEPTION_INIT(e_kyc_incomplete, -20021);
+  c_invalid_state         CONSTANT PLS_INTEGER := -20022;  -- the customer or account is not in a state that allows this
+  e_invalid_state         EXCEPTION; PRAGMA EXCEPTION_INIT(e_invalid_state, -20022);
+  c_invalid_file          CONSTANT PLS_INTEGER := -20023;  -- not the image it claims to be, empty or too large
+  e_invalid_file          EXCEPTION; PRAGMA EXCEPTION_INIT(e_invalid_file, -20023);
+  c_method_not_allowed    CONSTANT PLS_INTEGER := -20024;  -- e.g. a manual check of a Ghana Card (L.I. 2111)
+  e_method_not_allowed    EXCEPTION; PRAGMA EXCEPTION_INIT(e_method_not_allowed, -20024);
+  c_product_not_found     CONSTANT PLS_INTEGER := -20025;  -- unknown or no longer sold
+  e_product_not_found     EXCEPTION; PRAGMA EXCEPTION_INIT(e_product_not_found, -20025);
+  c_holder_kyc            CONSTANT PLS_INTEGER := -20026;  -- a holder's identity does not allow this yet
+  e_holder_kyc            EXCEPTION; PRAGMA EXCEPTION_INIT(e_holder_kyc, -20026);
+
   -- A bug in the packages themselves (for example unbalanced lines). Never
   -- caused by user input; report it.
   c_internal_error        CONSTANT PLS_INTEGER := -20999;

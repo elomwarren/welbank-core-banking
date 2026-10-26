@@ -25,6 +25,7 @@
   <include file="0005_accounts_ledger.sql" relativeToChangelogFile="true"/>
   <include file="0006_loans_cards_control.sql" relativeToChangelogFile="true"/>
   <include file="0007_transaction_limits_by_job.sql" relativeToChangelogFile="true"/>
+  <include file="0008_bank_parameters.sql" relativeToChangelogFile="true"/>
   <!-- New numbered migrations go HERE, above the code block. -->
 
   <!-- ============================ code ============================
@@ -36,9 +37,16 @@
   <include file="code/pkg_session_body.sql" relativeToChangelogFile="true"/>
   <include file="code/pkg_audit_spec.sql" relativeToChangelogFile="true"/>
   <include file="code/pkg_audit_body.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_params_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_params_body.sql" relativeToChangelogFile="true"/>
   <include file="code/pkg_posting_spec.sql" relativeToChangelogFile="true"/>
   <include file="code/pkg_posting_body.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_account_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_customer_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_account_body.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_customer_body.sql" relativeToChangelogFile="true"/>
   <include file="code/v_ledger_balance_check.sql" relativeToChangelogFile="true"/>
   <include file="code/v_account_statement.sql" relativeToChangelogFile="true"/>
+  <include file="code/v_pending_approvals.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
