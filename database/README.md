@@ -26,14 +26,17 @@ database/
 │   │                             approval requests (maker-checker); immutable audit trail
 │   ├── 0007_transaction_limits_by_job.sql  Posting limits per job instead of per Oracle role
 │   ├── 0008_bank_parameters.sql  Policy values (90-day KYC deferral, minimum age, review intervals)
+│   ├── 0009_loan_servicing.sql   Approval margin, interest charges on installments, GRR and affordability limit
 │   └── code/                     Packages and views (re-applied when their file changes):
 │       ├── pkg_errors_spec.sql       business error codes (-20001 ...) and named exceptions
 │       ├── pkg_session_*.sql         who is calling: the employee behind the session user
 │       ├── pkg_audit_*.sql           business events into the immutable audit_trail
 │       ├── pkg_params_*.sql          reads bank_parameters (no hard-coded policy values)
+│       ├── pkg_ledger_*.sql          the posting core; ACCESSIBLE BY pkg_posting and pkg_loan only
 │       ├── pkg_posting_*.sql         deposits, withdrawals, transfers, approvals, reversals
 │       ├── pkg_account_*.sql         account opening and approval, holders, debits follow KYC
 │       ├── pkg_customer_*.sql        registration, KYC data, NIA verifications, KYC approval
+│       ├── pkg_loan_*.sql            applications, disbursement, schedules, end of day, repayments
 │       ├── v_ledger_balance_check.sql  reconciliation: stored balances against the ledger
 │       ├── v_account_statement.sql     statement lines with a running balance
 │       └── v_pending_approvals.sql     the checkers' queue of pending requests
@@ -79,5 +82,6 @@ database/
 - `audit_trail` is an immutable table: rows can never be updated, nor deleted for five years, and **no column can ever be added**. Tests may insert into it only inside a transaction they roll back.
 - Packages and views live in `changelog/code/`, one file per object, with `runOnChange:true`: edit the file and run `update` again (fix forward). They stay at the **end** of `controller.xml`; new numbered migrations go above them.
 - Packages never `COMMIT`: the caller owns the transaction. Business errors use the codes in `pkg_errors` (`RAISE_APPLICATION_ERROR`), never ad-hoc numbers.
-- `update` ends with a compile check: Liquibase reports PL/SQL with compilation errors as success, so `liquibase.sh` recompiles the schema and fails if any object is still invalid.
+- `update` ends with a compile check: Liquibase reports PL/SQL with compilation errors as success, so `liquibase.sh` recompiles the schema (and revalidates assertions, which an `ALTER TABLE` marks INVALID) and fails if any object is still invalid.
+- Before deploying PL/SQL, check: every variable declared before any nested subprogram; no private package function inside a SQL statement (assign it to a variable first, PLS-00231); `EXISTS` only inside SQL (PLS-00204).
 - Liquibase records what it applied in `WELBANK.DATABASECHANGELOG`.

@@ -87,13 +87,22 @@ fi
 
 # PL/SQL that does not compile is still created ("with compilation errors"), and
 # Liquibase reports success. So after every change, recompile whatever is
-# invalid (a table change can invalidate the code that uses it) and fail if
-# anything is still invalid, listing the compiler's errors.
+# invalid (a table change can invalidate the code and the assertions that use
+# it) and fail if anything is still invalid, listing the compiler's errors.
 if [[ "$command" == "update" || "$command" == "update-testing-rollback" ]]; then
   check=$("${ORACLE_HOME}/sqlcl/bin/sql" -S /nolog <<SQL 2>&1
 connect wb_deploy[welbank]/"${deploy_pwd}"@${SERVICE}
 set feedback off heading off pagesize 0 linesize 300
 exec DBMS_UTILITY.COMPILE_SCHEMA(schema => USER, compile_all => FALSE)
+-- COMPILE_SCHEMA leaves assertions alone. An ALTER TABLE on a table an assertion
+-- reads marks it INVALID (still enforced, found in 23.26.3); VALIDATE clears it.
+begin
+  for o in (select object_id from user_objects
+             where status = 'INVALID' and object_name in (select assertion_name from user_assertions)) loop
+    DBMS_UTILITY.VALIDATE(o.object_id);
+  end loop;
+end;
+/
 select 'INVALID ' || object_type || ' ' || object_name from user_objects where status = 'INVALID' order by 1;
 select 'ERROR ' || type || ' ' || name || ' line ' || line || ': ' || text from user_errors where attribute = 'ERROR' order by name, type, sequence;
 exit

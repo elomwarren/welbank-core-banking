@@ -29,6 +29,7 @@ DECLARE
   v_count    PLS_INTEGER;
   v_rate     NUMBER;
   v_date     DATE;
+  v_int_txn  NUMBER;
 
   PROCEDURE accepts(p_name VARCHAR2, p_sql VARCHAR2) IS
   BEGIN
@@ -211,24 +212,24 @@ BEGIN
   rejects('SUBMITTED application with a decider',
     application_sql('decided_by, decided_at', v_manager || ', SYSTIMESTAMP'), 'LOAN_APPLICATIONS_DECIDED_CK');
   rejects('APPROVED without the person who decided',
-    'UPDATE loan_applications SET status = ''APPROVED'', approved_amount = 4000, approved_term_months = 12 WHERE application_id = ' || v_app,
+    'UPDATE loan_applications SET status = ''APPROVED'', approved_margin_pct = 6.5, approved_amount = 4000, approved_term_months = 12 WHERE application_id = ' || v_app,
     'LOAN_APPLICATIONS_DECIDED_CK');
   rejects('APPROVED without approved terms',
-    'UPDATE loan_applications SET status = ''APPROVED'', decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP WHERE application_id = ' || v_app,
+    'UPDATE loan_applications SET status = ''APPROVED'', approved_margin_pct = 6.5, decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP WHERE application_id = ' || v_app,
     'LOAN_APPLICATIONS_APPROVED_CK');
   rejects('APPROVED for more than was requested',
-    'UPDATE loan_applications SET status = ''APPROVED'', decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP, '
+    'UPDATE loan_applications SET status = ''APPROVED'', approved_margin_pct = 6.5, decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP, '
     || 'approved_amount = 6000, approved_term_months = 12 WHERE application_id = ' || v_app,
     'LOAN_APPLICATIONS_APPROVED_CK');
   rejects('loan officer deciding their own application',
-    'UPDATE loan_applications SET status = ''APPROVED'', decided_by = ' || v_officer || ', decided_at = SYSTIMESTAMP, '
+    'UPDATE loan_applications SET status = ''APPROVED'', approved_margin_pct = 6.5, decided_by = ' || v_officer || ', decided_at = SYSTIMESTAMP, '
     || 'approved_amount = 5000, approved_term_months = 12 WHERE application_id = ' || v_app,
     'LOAN_APPLICATIONS_CHECKER_CK');
   rejects('REJECTED without a decision note',
     'UPDATE loan_applications SET status = ''REJECTED'', decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP WHERE application_id = ' || v_app,
     'LOAN_APPLICATIONS_REJECTED_CK');
   accepts('credit manager approves 5000 over 12 months',
-    'UPDATE loan_applications SET status = ''APPROVED'', decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP, '
+    'UPDATE loan_applications SET status = ''APPROVED'', approved_margin_pct = 6.5, decided_by = ' || v_manager || ', decided_at = SYSTIMESTAMP, '
     || 'approved_amount = 5000, approved_term_months = 12 WHERE application_id = ' || v_app);
   SELECT updated_by INTO v_text FROM loan_applications WHERE application_id = v_app;
   check_that('update trigger filled updated_by (' || v_text || ')', v_text IS NOT NULL);
@@ -298,6 +299,12 @@ BEGIN
   rejects('installment of nothing',
     'INSERT INTO loan_schedule (loan_id, installment_no, due_date, principal_due, interest_due) VALUES (' || v_loan || q'[, 3, DATE '2027-01-26', 0, 0)]',
     'LOAN_SCHEDULE_AMOUNT_CK');
+  -- Interest is charged when an installment falls due (changelog 0009); only then can it be paid.
+  rejects('paying interest that was never charged',
+    'UPDATE loan_schedule SET interest_paid = 10, status = ''PARTIAL'' WHERE loan_id = ' || v_loan || ' AND installment_no = 2',
+    'LOAN_SCHEDULE_CHARGED_CK');
+  v_int_txn := posted_txn('INTEREST', v_loan_acc, v_vault, 68.92);
+  UPDATE loan_schedule SET interest_txn_id = v_int_txn WHERE loan_id = v_loan AND installment_no = 1;
   rejects('paying more interest than is due',
     'UPDATE loan_schedule SET interest_paid = 70, status = ''PARTIAL'' WHERE loan_id = ' || v_loan || ' AND installment_no = 1', 'LOAN_SCHEDULE_PAID_CK');
   rejects('PAID while principal is still owed',

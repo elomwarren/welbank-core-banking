@@ -76,6 +76,16 @@ CREATE OR REPLACE PACKAGE pkg_errors AS
   c_holder_kyc            CONSTANT PLS_INTEGER := -20026;  -- a holder's identity does not allow this yet
   e_holder_kyc            EXCEPTION; PRAGMA EXCEPTION_INIT(e_holder_kyc, -20026);
 
+  -- Loans.
+  c_outside_product       CONSTANT PLS_INTEGER := -20027;  -- amount or term outside the loan product's range
+  e_outside_product       EXCEPTION; PRAGMA EXCEPTION_INIT(e_outside_product, -20027);
+  c_not_affordable        CONSTANT PLS_INTEGER := -20028;  -- repayments above the debt-service limit
+  e_not_affordable        EXCEPTION; PRAGMA EXCEPTION_INIT(e_not_affordable, -20028);
+  c_more_than_due         CONSTANT PLS_INTEGER := -20029;  -- repayment larger than what is due now
+  e_more_than_due         EXCEPTION; PRAGMA EXCEPTION_INIT(e_more_than_due, -20029);
+  c_loan_not_found        CONSTANT PLS_INTEGER := -20030;  -- no such loan or loan application
+  e_loan_not_found        EXCEPTION; PRAGMA EXCEPTION_INIT(e_loan_not_found, -20030);
+
   -- A bug in the packages themselves (for example unbalanced lines). Never
   -- caused by user input; report it.
   c_internal_error        CONSTANT PLS_INTEGER := -20999;

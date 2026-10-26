@@ -113,7 +113,8 @@ Optional settings (port, recovery-area size, image) go in a `.env` file; see `.e
 - [x] Loans (Ghana Reference Rate pricing, Bank of Ghana classes), debit cards (no card numbers stored), maker-checker queue, immutable audit trail: the Tier 1 schema is complete
 - [x] Posting packages: deposits, withdrawals, transfers, maker-checker approvals and reversals through `pkg_posting`; reconciliation and statement views
 - [x] Onboarding packages: customer registration, NIA verification records, KYC maker-checker, 90-day deferral, account opening and approval; KYC switches debits on and off
-- [ ] More packages: loans, account servicing (freeze, close), HR
+- [x] Loan packages: applications with maker-checker and credit authority, GRR-based pricing, affordability check, disbursement, annuity schedules, end-of-day interest and arrears with Bank of Ghana classes, repayments and closure
+- [ ] More packages: account servicing (freeze, close, interest on savings), HR
 - [ ] Seed data mirroring Ghana's population
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE
 - [ ] Backup and recovery: RMAN, scheduler jobs, practised restore
