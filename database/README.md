@@ -22,8 +22,16 @@ database/
 │   │                             contacts, next of kin, photo / signature / proof-of-address files
 │   ├── 0005_accounts_ledger.sql  Accounts, account holders, transactions, ledger lines; SQL assertions;
 │   │                             debits = credits checked at COMMIT (ON COMMIT materialized view)
-│   └── 0006_loans_cards_control.sql  Loan classes, applications, loans, schedule, repayments; cards;
-│                                 approval requests (maker-checker); immutable audit trail
+│   ├── 0006_loans_cards_control.sql  Loan classes, applications, loans, schedule, repayments; cards;
+│   │                             approval requests (maker-checker); immutable audit trail
+│   ├── 0007_transaction_limits_by_job.sql  Posting limits per job instead of per Oracle role
+│   └── code/                     Packages and views (re-applied when their file changes):
+│       ├── pkg_errors_spec.sql       business error codes (-20001 ...) and named exceptions
+│       ├── pkg_session_*.sql         who is calling: the employee behind the session user
+│       ├── pkg_audit_*.sql           business events into the immutable audit_trail
+│       ├── pkg_posting_*.sql         deposits, withdrawals, transfers, approvals, reversals
+│       ├── v_ledger_balance_check.sql  reconciliation: stored balances against the ledger
+│       └── v_account_statement.sql     statement lines with a running balance
 ├── tests/            Database tests: good rows must be accepted, bad rows rejected
 │   ├── run_tests.sh              Runs every *_test.sql as SYSDBA in WELBANK, adds up the results
 │   ├── NNNN_*_test.sql           One file per changelog area, rolled back at the end
@@ -64,4 +72,7 @@ database/
 - Rules on one row are CHECK constraints; rules across rows or tables are SQL assertions (`CREATE ASSERTION`, Oracle 23.26.1+). Assertions need NOT NULL join columns of identical types, and cannot use SUM or GROUP BY.
 - Never run `SET CONSTRAINTS ALL DEFERRED`: in 23.26.3 it also defers the NOT DEFERRABLE assertions until COMMIT. Defer a deferrable assertion by name instead.
 - `audit_trail` is an immutable table: rows can never be updated, nor deleted for five years, and **no column can ever be added**. Tests may insert into it only inside a transaction they roll back.
+- Packages and views live in `changelog/code/`, one file per object, with `runOnChange:true`: edit the file and run `update` again (fix forward). They stay at the **end** of `controller.xml`; new numbered migrations go above them.
+- Packages never `COMMIT`: the caller owns the transaction. Business errors use the codes in `pkg_errors` (`RAISE_APPLICATION_ERROR`), never ad-hoc numbers.
+- `update` ends with a compile check: Liquibase reports PL/SQL with compilation errors as success, so `liquibase.sh` recompiles the schema and fails if any object is still invalid.
 - Liquibase records what it applied in `WELBANK.DATABASECHANGELOG`.

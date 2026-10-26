@@ -8,6 +8,9 @@
       To change the schema, add a NEW changeset (in a new file, appended below).
     * One file per area, numbered; new files go at the end of the list.
     * Every changeset has a "rollback" so it can be undone with: db-migrate.sh rollback-count N
+    * Code (packages, views: CREATE OR REPLACE objects) lives in code/, one file per object,
+      with runOnChange:true: editing the file re-applies it on the next update. For code,
+      fix forward (edit and update again) instead of rolling back.
 -->
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
@@ -21,5 +24,21 @@
   <include file="0004_customers_kyc.sql" relativeToChangelogFile="true"/>
   <include file="0005_accounts_ledger.sql" relativeToChangelogFile="true"/>
   <include file="0006_loans_cards_control.sql" relativeToChangelogFile="true"/>
+  <include file="0007_transaction_limits_by_job.sql" relativeToChangelogFile="true"/>
+  <!-- New numbered migrations go HERE, above the code block. -->
+
+  <!-- ============================ code ============================
+       Packages and views, re-applied whenever their file changes. Kept at the
+       END of the list so they always compile against the newest tables.
+       Order matters on the first run: a package after what it uses. -->
+  <include file="code/pkg_errors_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_session_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_session_body.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_audit_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_audit_body.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_posting_spec.sql" relativeToChangelogFile="true"/>
+  <include file="code/pkg_posting_body.sql" relativeToChangelogFile="true"/>
+  <include file="code/v_ledger_balance_check.sql" relativeToChangelogFile="true"/>
+  <include file="code/v_account_statement.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

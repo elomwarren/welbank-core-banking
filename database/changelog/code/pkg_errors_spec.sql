@@ -1,0 +1,65 @@
+--liquibase formatted sql
+
+--changeset elomwarren:code-pkg-errors-spec runOnChange:true endDelimiter:/
+--comment: Business error codes of the WEL Bank packages (a specification only: no body needed).
+CREATE OR REPLACE PACKAGE pkg_errors AS
+  -- ===========================================================================
+  -- The business errors the packages raise, in one place.
+  --
+  -- Each error has a stable number (the range -20000 to -20999 is reserved for
+  -- applications by RAISE_APPLICATION_ERROR) and a named exception, so callers
+  -- can write:   EXCEPTION WHEN pkg_errors.e_insufficient_funds THEN ...
+  -- The web API maps the numbers to messages and HTTP status codes; never
+  -- change a number once it is in use, only add new ones.
+  --
+  -- PRAGMA EXCEPTION_INIT needs a literal, so each number appears twice: as a
+  -- constant (for RAISE_APPLICATION_ERROR) and in its exception's pragma.
+  -- ===========================================================================
+
+  -- Who is calling.
+  c_not_an_employee       CONSTANT PLS_INTEGER := -20001;
+  e_not_an_employee       EXCEPTION; PRAGMA EXCEPTION_INIT(e_not_an_employee, -20001);
+
+  -- Accounts.
+  c_account_not_found     CONSTANT PLS_INTEGER := -20002;
+  e_account_not_found     EXCEPTION; PRAGMA EXCEPTION_INIT(e_account_not_found, -20002);
+  c_account_not_open      CONSTANT PLS_INTEGER := -20003;  -- pending approval, closed or rejected
+  e_account_not_open      EXCEPTION; PRAGMA EXCEPTION_INIT(e_account_not_open, -20003);
+  c_debits_blocked        CONSTANT PLS_INTEGER := -20004;  -- not ACTIVE, or post_no_debit
+  e_debits_blocked        EXCEPTION; PRAGMA EXCEPTION_INIT(e_debits_blocked, -20004);
+  c_insufficient_funds    CONSTANT PLS_INTEGER := -20005;
+  e_insufficient_funds    EXCEPTION; PRAGMA EXCEPTION_INIT(e_insufficient_funds, -20005);
+  c_insufficient_vault    CONSTANT PLS_INTEGER := -20006;  -- not enough cash in the branch vault
+  e_insufficient_vault    EXCEPTION; PRAGMA EXCEPTION_INIT(e_insufficient_vault, -20006);
+  c_currency_mismatch     CONSTANT PLS_INTEGER := -20007;
+  e_currency_mismatch     EXCEPTION; PRAGMA EXCEPTION_INIT(e_currency_mismatch, -20007);
+  c_same_account          CONSTANT PLS_INTEGER := -20008;
+  e_same_account          EXCEPTION; PRAGMA EXCEPTION_INIT(e_same_account, -20008);
+  c_invalid_amount        CONSTANT PLS_INTEGER := -20009;  -- not positive, or too many decimals
+  e_invalid_amount        EXCEPTION; PRAGMA EXCEPTION_INIT(e_invalid_amount, -20009);
+  c_no_vault              CONSTANT PLS_INTEGER := -20010;  -- the branch holds no cash in that currency
+  e_no_vault              EXCEPTION; PRAGMA EXCEPTION_INIT(e_no_vault, -20010);
+
+  -- Transactions and approvals.
+  c_txn_not_found         CONSTANT PLS_INTEGER := -20011;
+  e_txn_not_found         EXCEPTION; PRAGMA EXCEPTION_INIT(e_txn_not_found, -20011);
+  c_txn_not_pending       CONSTANT PLS_INTEGER := -20012;
+  e_txn_not_pending       EXCEPTION; PRAGMA EXCEPTION_INIT(e_txn_not_pending, -20012);
+  c_own_approval          CONSTANT PLS_INTEGER := -20013;  -- maker-checker: nobody checks their own work
+  e_own_approval          EXCEPTION; PRAGMA EXCEPTION_INIT(e_own_approval, -20013);
+  c_over_your_limit       CONSTANT PLS_INTEGER := -20014;  -- the checker's own limit is too low
+  e_over_your_limit       EXCEPTION; PRAGMA EXCEPTION_INIT(e_over_your_limit, -20014);
+  c_cannot_reverse        CONSTANT PLS_INTEGER := -20015;
+  e_cannot_reverse        EXCEPTION; PRAGMA EXCEPTION_INIT(e_cannot_reverse, -20015);
+  c_request_not_found     CONSTANT PLS_INTEGER := -20016;  -- no such pending approval request
+  e_request_not_found     EXCEPTION; PRAGMA EXCEPTION_INIT(e_request_not_found, -20016);
+  c_reason_required       CONSTANT PLS_INTEGER := -20017;  -- rejections and reversals must say why
+  e_reason_required       EXCEPTION; PRAGMA EXCEPTION_INIT(e_reason_required, -20017);
+
+  -- A bug in the packages themselves (for example unbalanced lines). Never
+  -- caused by user input; report it.
+  c_internal_error        CONSTANT PLS_INTEGER := -20999;
+  e_internal_error        EXCEPTION; PRAGMA EXCEPTION_INIT(e_internal_error, -20999);
+END pkg_errors;
+/
+--rollback DROP PACKAGE pkg_errors

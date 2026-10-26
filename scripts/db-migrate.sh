@@ -5,7 +5,8 @@
 #
 #   status                   list the changes not applied yet
 #   update-sql               print the SQL that "update" would run, without running it
-#   update                   apply every pending change, in order
+#   update                   apply every pending change, in order, then check that every
+#                            package and view compiles (fails if anything is invalid)
 #   update-testing-rollback  apply pending changes, roll them back, apply again (tests rollbacks)
 #   history                  list the changes already applied, with dates
 #   validate                 check the changelog files for mistakes, without touching the database

@@ -13,6 +13,7 @@ DECLARE
   failed PLS_INTEGER := 0;
   v_region NUMBER;
   v_branch NUMBER;
+  v_job    NUMBER;
 
   -- The statement must succeed.
   PROCEDURE accepts(p_name VARCHAR2, p_sql VARCHAR2) IS
@@ -41,6 +42,9 @@ BEGIN
   INSERT INTO branches (branch_code, branch_name, region_id, phone, opened_on)
   VALUES ('T-BR1', 'Test branch', v_region, '+233200000001', DATE '2020-01-01')
   RETURNING branch_id INTO v_branch;
+  INSERT INTO departments (department_name) VALUES ('Test operations') RETURNING department_id INTO v_job;
+  INSERT INTO jobs (job_title, department_id, min_salary, max_salary)
+  VALUES ('Test teller', v_job, 20000, 40000) RETURNING job_id INTO v_job;
 
   rejects('currency code in lower case',
     q'[INSERT INTO currencies (currency_code, currency_name) VALUES ('zzb', 'Lower case')]');
@@ -70,14 +74,17 @@ BEGIN
     q'[INSERT INTO loan_products (product_code, product_name, currency_code, interest_rate, min_amount, max_amount, max_term_months) VALUES ('T-PL1', 'PL', 'ZZA', 120, 100, 1000, 12)]');
   rejects('loan minimum above maximum',
     q'[INSERT INTO loan_products (product_code, product_name, currency_code, interest_rate, min_amount, max_amount, max_term_months) VALUES ('T-PL2', 'PL', 'ZZA', 25, 5000, 1000, 12)]');
+  -- Limits are set per job (changelog 0007).
   accepts('teller cash-deposit limit',
-    q'[INSERT INTO transaction_limits (role_name, txn_type, currency_code, max_amount) VALUES ('T_TELLER', 'CASH_DEPOSIT', 'ZZA', 20000)]');
-  rejects('role name in lower case',
-    q'[INSERT INTO transaction_limits (role_name, txn_type, currency_code, max_amount) VALUES ('t_teller', 'TRANSFER', 'ZZA', 5000)]');
+    'INSERT INTO transaction_limits (job_id, txn_type, currency_code, max_amount) VALUES (' || v_job || q'[, 'CASH_DEPOSIT', 'ZZA', 20000)]');
+  rejects('second cash-deposit limit for the same job and currency',
+    'INSERT INTO transaction_limits (job_id, txn_type, currency_code, max_amount) VALUES (' || v_job || q'[, 'CASH_DEPOSIT', 'ZZA', 30000)]');
+  rejects('limit for a job that does not exist',
+    q'[INSERT INTO transaction_limits (job_id, txn_type, currency_code, max_amount) VALUES (-1, 'TRANSFER', 'ZZA', 5000)]');
   rejects('unknown transaction type',
-    q'[INSERT INTO transaction_limits (role_name, txn_type, currency_code, max_amount) VALUES ('T_TELLER', 'BRIBE', 'ZZA', 5000)]');
+    'INSERT INTO transaction_limits (job_id, txn_type, currency_code, max_amount) VALUES (' || v_job || q'[, 'BRIBE', 'ZZA', 5000)]');
   rejects('limit of zero',
-    q'[INSERT INTO transaction_limits (role_name, txn_type, currency_code, max_amount) VALUES ('T_TELLER', 'TRANSFER', 'ZZA', 0)]');
+    'INSERT INTO transaction_limits (job_id, txn_type, currency_code, max_amount) VALUES (' || v_job || q'[, 'TRANSFER', 'ZZA', 0)]');
 
   DBMS_OUTPUT.PUT_LINE('RESULT: ' || passed || ' passed, ' || failed || ' failed');
   ROLLBACK;

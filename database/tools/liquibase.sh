@@ -84,3 +84,25 @@ if ! grep -q 'Operation completed successfully' <<<"$output" \
   echo "liquibase.sh: '${command}' FAILED (see the messages above)" >&2
   exit 1
 fi
+
+# PL/SQL that does not compile is still created ("with compilation errors"), and
+# Liquibase reports success. So after every change, recompile whatever is
+# invalid (a table change can invalidate the code that uses it) and fail if
+# anything is still invalid, listing the compiler's errors.
+if [[ "$command" == "update" || "$command" == "update-testing-rollback" ]]; then
+  check=$("${ORACLE_HOME}/sqlcl/bin/sql" -S /nolog <<SQL 2>&1
+connect wb_deploy[welbank]/"${deploy_pwd}"@${SERVICE}
+set feedback off heading off pagesize 0 linesize 300
+exec DBMS_UTILITY.COMPILE_SCHEMA(schema => USER, compile_all => FALSE)
+select 'INVALID ' || object_type || ' ' || object_name from user_objects where status = 'INVALID' order by 1;
+select 'ERROR ' || type || ' ' || name || ' line ' || line || ': ' || text from user_errors where attribute = 'ERROR' order by name, type, sequence;
+exit
+SQL
+)
+  if grep -qE '^(INVALID|ERROR) |ORA-[0-9]{5}' <<<"$check"; then
+    grep -E '^(INVALID|ERROR) |ORA-[0-9]{5}' <<<"$check" >&2
+    echo "liquibase.sh: invalid objects after '${command}' (see above)" >&2
+    exit 1
+  fi
+  echo "liquibase.sh: every schema object compiles (no invalid objects)"
+fi
