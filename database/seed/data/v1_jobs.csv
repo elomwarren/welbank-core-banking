@@ -1,0 +1,37 @@
+job_id,job_title,min_salary,max_salary,department_id
+101,Bank teller,25000,45000,10
+102,Personal banker,35000,65000,10
+103,Customer service representative,25000,45000,10
+104,Call center representative,20000,35000,10
+105,Account manager,40000,70000,10
+106,Loan officer,45000,85000,10
+107,Credit analyst,40000,70000,10
+201,Branch manager,60000,120000,20
+202,Operations manager,50000,90000,20
+203,Operations specialist,35000,65000,20
+204,Teller supervisor,40000,70000,20
+205,Loan processor,35000,65000,20
+206,Compliance officer,45000,75000,20
+207,IT support specialist,30000,50000,20
+301,Marketing manager,65000,125000,30
+302,Marketing specialist,45000,85000,30
+303,Product manager,60000,110000,30
+304,Brand manager,65000,125000,30
+305,Digital marketing manager,50000,90000,30
+306,Social media manager,40000,70000,30
+307,Public relations specialist,45000,75000,30
+401,Human resources manager,75000,150000,40
+402,Recruiter,50000,90000,40
+403,HR generalist,45000,75000,40
+501,Financial analyst,50000,90000,50
+502,Portfolio manager,75000,150000,50
+503,Risk manager,75000,150000,50
+504,Treasury manager,85000,175000,50
+505,Controller,95000,195000,50
+506,Chief financial officer (CFO),125000,250000,50
+601,IT manager,95000,195000,60
+602,Software engineer,75000,150000,60
+603,Systems analyst,65000,125000,60
+604,Database administrator,65000,125000,60
+605,Network engineer,75000,150000,60
+606,Security engineer,85000,175000,60

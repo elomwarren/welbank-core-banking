@@ -1,0 +1,14 @@
+group,code,is_ecowas,population
+Burkina Faso,BFA,True,46953
+Cote d'Ivoire,CIV,True,12511
+Gambia,GMB,True,376
+Liberia,LBR,True,6195
+Nigeria,NGA,True,76961
+Sierra Leone,SLE,True,1318
+Togo,TGO,True,60349
+Other ECOWAS countries,ECOWAS_OTHER,True,66175
+"Africa, other than ECOWAS",AFRICA_OTHER,False,6024
+Americas,AMERICAS,False,2788
+Asia,ASIA,False,11313
+Europe,EUROPE,False,3102
+Oceania,OCEANIA,False,169

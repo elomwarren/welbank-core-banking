@@ -41,6 +41,7 @@ flowchart LR
 │   ├── container/startup/   Run on every container start (none yet)
 │   ├── bootstrap/           Schema owner, deployment account, documents tablespace (SYSDBA)
 │   ├── changelog/           Liquibase changelogs: domains, tables, ...
+│   ├── seed/                Synthetic, census-shaped data: generator, monthly simulation, sources
 │   ├── tests/               Database tests (*_test.sql) and their runner
 │   └── tools/               liquibase.sh and sql-session.sh, run inside the container
 ├── scripts/
@@ -48,6 +49,7 @@ flowchart LR
 │   ├── db-bootstrap.sh      Runs the bootstrap inside the container
 │   ├── db-migrate.sh        Runs Liquibase (status, update, history, rollback) inside the container
 │   ├── db-sql.sh            Opens an interactive SQLcl session (no password to type)
+│   ├── db-seed.sh           Fills an empty database with two years of synthetic data
 │   └── db-test.sh           Runs the database tests
 ├── legacy/desktop-pyqt6/    Frozen v1 desktop app (reference only), with screenshots
 ├── CONTRIBUTING.md          Workflow, commit messages, code style, secrets rule
@@ -88,6 +90,7 @@ What you get: Oracle AI Database 26ai Free with every tablespace encrypted (TDE)
 | Undo the last change | `./scripts/db-migrate.sh rollback-count 1` |
 | Run the database tests (good and bad data, rolled back; the commit test cleans up after itself) | `./scripts/db-test.sh` |
 | Re-create / re-sync accounts and storage (safe to repeat) | `./scripts/db-bootstrap.sh` |
+| Load the synthetic data (empty database only) | `./scripts/db-seed.sh` |
 
 | Task | Command |
 |---|---|
@@ -115,7 +118,7 @@ Optional settings (port, recovery-area size, image) go in a `.env` file; see `.e
 - [x] Onboarding packages: customer registration, NIA verification records, KYC maker-checker, 90-day deferral, account opening and approval; KYC switches debits on and off
 - [x] Loan packages: applications with maker-checker and credit authority, GRR-based pricing, affordability check, disbursement, annuity schedules, end-of-day interest and arrears with Bank of Ghana classes, repayments and closure
 - [ ] More packages: account servicing (freeze, close, interest on savings), HR
-- [ ] Seed data mirroring Ghana's population
+- [x] Seed data mirroring Ghana's population (GSS 2021 census): 2,000 customers, 21 branches, two years of activity, all loaded through the packages
 - [ ] Roles, profiles, proxy authentication, Unified Auditing, TDE
 - [ ] Backup and recovery: RMAN, scheduler jobs, practised restore
 - [ ] FastAPI backend

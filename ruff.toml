@@ -26,3 +26,8 @@ convention = "google"
 [lint.per-file-ignores]
 # Tests may use assert and skip docstrings.
 "**/tests/**" = ["S101", "D"]
+# The seed generator is an offline script that writes a SQL file, never a query
+# run against user input (S608), and wants reproducible, non-secret randomness
+# (S311). Its name tables and SQL templates run past 100 columns (E501) and its
+# small helpers are explained by the module docstring and comments (D1).
+"database/seed/generate_seed.py" = ["S608", "S311", "E501", "D1"]

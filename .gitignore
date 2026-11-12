@@ -66,3 +66,6 @@ Thumbs.db
 # --- Logs ----------------------------------------------------------------
 *.log
 logs/
+
+# Generated seed script (database/seed/generate_seed.py writes it)
+database/seed/build/

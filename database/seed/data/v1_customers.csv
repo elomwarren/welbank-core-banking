@@ -1,0 +1,61 @@
+customer_id,ghana_card,first_name,last_name,sex,date_of_birth,nationality,email,phone,occupation,town,branch_id,officer_id
+10000001,GHA-000000001-0,Kwame,Anane,Male,25-JUL-80,Ghanaian,kwame.anane@gmail.com,502345678,Accountant,Madina,1,1102001
+10000002,GHA-000000002-0,James,Boateng,Male,30-MAY-90,Ghanaian,james.boateng@gmail.com,502345679,Architect,East Legon,1,1102002
+10000003,GHA-000000003-0,Sarah,Adjei,Female,15-JUN-95,Ghanaian,sarah.adjei@gmail.com,502345680,Software Engineer,Botwe,1,1102003
+10000004,GHA-000000004-0,Adwoa,Mensah,Female,20-SEP-88,Ghanaian,adwoa.mensah@gmail.com,502345681,Lawyer,Adenta,1,1102001
+10000005,GHA-000000005-0,Yaw,Osei,Male,28-DEC-75,Ghanaian,yaw.osei@gmail.com,502345682,Journalist,Tema,1,1102002
+10000006,GHA-000000006-0,Ama,Nyarko,Female,05-NOV-83,Ghanaian,ama.nyarko@gmail.com,502345683,Nurse,Ashaiman,1,1102003
+10000007,GHA-000000007-0,Kwabena,Appiah,Male,15-MAR-92,Ghanaian,kwabena.appiah@gmail.com,502345684,Physician,Osu,1,1102001
+10000008,GHA-000000008-0,Linda,Quansah,Female,19-OCT-78,Ghanaian,linda.quansah@gmail.com,502345685,Teacher,Dansoman,1,1102002
+10000009,GHA-000000009-0,Kojo,Acheampong,Male,23-JAN-85,Ghanaian,kojo.acheampong@gmail.com,502345686,School Teacher,Madina,1,1102003
+10000010,GHA-000000010-0,Abena,Frimpong,Female,14-AUG-82,Ghanaian,abena.frimpong@gmail.com,502345687,Police Officer,East Legon,1,1102001
+10000011,GHA-000000011-0,Yaw,Asare,Male,17-FEB-79,Ghanaian,yaw.asare@gmail.com,502345688,Statistician,Botwe,1,1102002
+10000012,GHA-000000012-0,Aba,Kwakye,Female,29-MAY-81,Ghanaian,aba.kwakye@gmail.com,502345689,Surgeon,Adenta,1,1102003
+10000013,GHA-000000013-0,Kwasi,Agyei,Male,01-APR-77,Ghanaian,kwasi.agyei@gmail.com,502345690,Data Scientist,Tema,1,1102001
+10000014,GHA-000000014-0,Esi,Owusu,Female,15-JUL-99,Ghanaian,esi.owusu@gmail.com,502345691,Web Developer,Ashaiman,1,1102002
+10000015,GHA-000000015-0,Kojo,Antwi,Male,30-JUN-86,Ghanaian,kojo.antwi@gmail.com,502345692,Software Engineer,Osu,1,1102003
+10000016,GHA-000000016-0,Afia,Kumi,Female,02-SEP-89,Ghanaian,afia.kumi@gmail.com,502345693,School Teacher,Dansoman,1,1102001
+10000017,GHA-000000017-0,Yaw,Nkansah,Male,18-NOV-76,Ghanaian,yaw.nkansah@gmail.com,502345694,Pharmacist,Madina,1,1102002
+10000018,GHA-000000018-0,Ama,Yeboah,Female,04-DEC-84,Ghanaian,ama.yeboah@gmail.com,502345695,Lawyer,East Legon,1,1102003
+10000019,GHA-000000019-0,Kwabena,Gyamfi,Male,28-FEB-80,Ghanaian,kwabena.gyamfi@gmail.com,502345696,Graphic Designer,Botwe,1,1102001
+10000020,GHA-000000020-0,Akosua,Ofori,Female,12-APR-97,Ghanaian,akosua.ofori@gmail.com,502345697,Journalist,Adenta,1,1102002
+10000021,GHA-000000021-0,Thomas,Darko,Male,16-MAR-83,Ghanaian,thomas.darko@gmail.com,502345698,Accountant,Tema,1,1102003
+10000022,GHA-000000022-0,Adwoa,Sarpong,Female,07-MAY-98,Ghanaian,adwoa.sarpong@gmail.com,502345699,Actuary,Ashaiman,1,1102001
+10000023,GHA-000000023-0,Kwame,Adom,Male,24-JUL-78,Ghanaian,kwame.adom@gmail.com,502345700,Statistician,Osu,1,1102002
+10000024,GHA-000000024-0,Efia,Amoah,Female,08-AUG-96,Ghanaian,efia.amoah@gmail.com,502345701,Economist,Dansoman,1,1102003
+10000025,GHA-000000025-0,Yaw,Opoku,Male,30-SEP-87,Ghanaian,yaw.opoku@gmail.com,502345702,Actuary,Madina,1,1102001
+10000026,GHA-000000026-0,Abena,Adu,Female,16-OCT-99,Ghanaian,abena.adu@gmail.com,502345703,Nurse,East Legon,1,1102002
+10000027,GHA-000000027-0,Kojo,Twumasi,Male,02-NOV-79,Ghanaian,kojo.twumasi@gmail.com,502345704,Data Engineer,Botwe,1,1102003
+10000028,GHA-000000028-0,Akua,Asamoah,Female,19-DEC-81,Ghanaian,akua.asamoah@gmail.com,502345705,Civil Servant,Adenta,1,1102001
+10000029,GHA-000000029-0,Kwabena,Owusu-Ansah,Male,05-JAN-82,Ghanaian,kwabena.owusuansah@gmail.com,502345706,Librarian,Tema,1,1102002
+10000030,GHA-000000030-0,Afia,Osei-Tutu,Female,21-FEB-98,Ghanaian,afia.oseitutu@gmail.com,502345707,Police Officer,Ashaiman,1,1102003
+50000001,GHA-000000031-0,James,Abu,Male,02-MAY-88,Ghanaian,james.abu@gmail.com,502123456,Statistician,Kpeve,5,5102001
+50000002,GHA-000000032-0,Abigail,Essuman,Female,10-MAR-89,Ghanaian,abigail.essuman@gmail.com,203123457,Police Officer,Akatsi,5,5102002
+50000003,GHA-000000033-0,Michael,Amewu,Male,21-JUL-86,Ghanaian,michael.amewu@gmail.com,505123458,Electrician,Asikuma,5,5102003
+50000004,GHA-000000034-0,Sarah,Biney,Female,30-NOV-83,Ghanaian,sarah.biney@gmail.com,205123459,Software Developer,Amedzofe,5,5102001
+50000005,GHA-000000035-0,Samuel,Dadzie,Male,15-DEC-95,Ghanaian,samuel.dadzie@gmail.com,502123450,Lawyer,Donkorkrom,5,5102002
+50000006,GHA-000000036-0,Grace,Boadu,Female,05-JUN-90,Ghanaian,grace.boadu@gmail.com,205123461,Nurse,Hohoe,5,5102003
+50000007,GHA-000000037-0,Benjamin,Dogbey,Male,20-JAN-81,Ghanaian,benjamin.dogbey@gmail.com,502123462,Lawyer,Akosombo,5,5102001
+50000008,GHA-000000038-0,Elizabeth,Badu,Female,07-APR-97,Ghanaian,elizabeth.badu@gmail.com,205123463,Dentist,Kpeve,5,5102002
+50000009,GHA-000000039-0,Joseph,Gadebgeku,Male,27-FEB-82,Ghanaian,joseph.gadebgeku@gmail.com,502123464,Doctor,Akatsi,5,5102003
+50000010,GHA-000000040-0,Rita,Barnes,Female,15-SEP-99,Ghanaian,rita.barnes@gmail.com,205123465,Financial Analyst,Asikuma,5,5102001
+50000011,GHA-000000041-0,Paul,Abaane,Male,22-APR-79,Ghanaian,paul.abaane@gmail.com,502123466,Marketing Manager,Amedzofe,5,5102002
+50000012,GHA-000000042-0,Esther,Baffour,Female,03-JUL-94,Ghanaian,esther.baffour@gmail.com,205123467,Accountant,Donkorkrom,5,5102003
+50000013,GHA-000000043-0,Peter,Abakah,Male,28-NOV-82,Ghanaian,peter.abakah@gmail.com,502123468,Farmer,Hohoe,5,5102001
+50000014,GHA-000000044-0,Patricia,Boachie,Female,14-DEC-87,Ghanaian,patricia.boachie@gmail.com,205123469,Police Officer,Akosombo,5,5102002
+50000015,GHA-000000045-0,Robert,Aboagye,Male,29-JAN-76,Ghanaian,robert.aboagye@gmail.com,502123470,Photographer,Kpeve,5,5102003
+50000016,GHA-000000046-0,Nancy,Opoku,Female,07-JUN-93,Ghanaian,nancy.opoku@gmail.com,205123471,Plumber,Akatsi,5,5102001
+50000017,GHA-000000047-0,Jacob,Mawutor,Male,23-JUL-81,Ghanaian,jacob.mawutor@gmail.com,502123472,Politician,Asikuma,5,5102002
+50000018,GHA-000000048-0,Monica,Bart-plange,Female,11-AUG-92,Ghanaian,monica.bart-plange@gmail.com,205123473,Teacher,Amedzofe,5,5102003
+50000019,GHA-000000049-0,Samuel,Boafo,Male,30-SEP-88,Ghanaian,samuel.boafo@gmail.com,502123474,Data Scientist,Donkorkrom,5,5102001
+50000020,GHA-000000050-0,Diana,Bortey,Female,17-OCT-90,Ghanaian,diana.bortey@gmail.com,205123475,Statistician,Hohoe,5,5102002
+50000021,GHA-000000051-0,Daniel,Amevor,Male,06-NOV-79,Ghanaian,daniel.amevor@gmail.com,502123476,Architect,Akosombo,5,5102003
+50000022,GHA-000000052-0,Rebecca,Coblah,Female,25-DEC-91,Ghanaian,rebecca.coblah@gmail.com,205123477,Doctor,Kpeve,5,5102001
+50000023,GHA-000000053-0,Henry,Abankwa,Male,14-FEB-85,Ghanaian,henry.abankwa@gmail.com,502123478,Carpenter,Akatsi,5,5102002
+50000024,GHA-000000054-0,Sophia,Bakari,Female,04-MAR-83,Ghanaian,sophia.bakari@gmail.com,205123479,Nurse,Asikuma,5,5102003
+50000025,GHA-000000055-0,Stephen,Abayateye,Male,20-APR-76,Ghanaian,stephen.abayateye@gmail.com,502123480,Cashier,Amedzofe,5,5102001
+50000026,GHA-000000056-0,Alice,Fato,Female,09-MAY-89,Ghanaian,alice.fato@gmail.com,205123481,Entrepreneur,Donkorkrom,5,5102002
+50000027,GHA-000000057-0,Matthew,Ababio,Male,26-JUN-87,Ghanaian,matthew.ababio@gmail.com,502123482,Farmer,Hohoe,5,5102003
+50000028,GHA-000000058-0,Judith,Bassaw,Female,16-JUL-95,Ghanaian,judith.bassaw@gmail.com,205123483,Electrician,Akosombo,5,5102001
+50000029,GHA-000000059-0,George,Abeiku,Male,04-AUG-82,Ghanaian,george.abeiku@gmail.com,502123484,Fireman,Kpeve,5,5102002
+50000030,GHA-000000060-0,Victoria,Badu,Female,21-SEP-86,Ghanaian,victoria.badu@gmail.com,205123485,Judge,Akatsi,5,5102003

@@ -1,0 +1,43 @@
+employee_id,first_name,last_name,sex,nationality,branch,email,phone,salary,hire_date,job_id,department_id,branch_id
+1101001,Kwame,Owusu,Male,Ghanaian,East Legon,kwame.owusu@gmail.com,550500216,25000.00,15-JUNE-20,101,10,1
+1101002,Akosua,Appiah,Female,Ghanaian,East Legon,akosua.appiah@gmail.com,502345678,35000.00,20-JUL-22,101,10,1
+1101003,Kwesi,Annan,Male,Ghanaian,East Legon,kwesi.annan@gmail.com,540345679,37000.00,12-AUG-19,101,10,1
+1102001,Ama,Boateng,Female,Ghanaian,East Legon,ama.boateng@gmail.com,248456789,48000.00,17-SEP-22,102,10,1
+1102002,Kofi,Asante,Male,Ghanaian,East Legon,kofi.asante@gmail.com,550567890,50000.00,25-OCT-21,102,10,1
+1102003,Adwoa,Addo,Female,Ghanaian,East Legon,adwoa.addo@gmail.com,550678901,45000.00,28-NOV-20,102,10,1
+1103001,Yaw,Amoah,Male,Ghanaian,East Legon,yaw.amoah@gmail.com,570789012,40000.00,02-JAN-22,103,10,1
+1103002,Abena,Acheampong,Female,Ghanaian,East Legon,abena.acheampong@gmail.com,240890123,45000.00,08-FEB-20,103,10,1
+1104001,Kwaku,Boakye,Male,Ghanaian,East Legon,kwaku.boakye@gmail.com,548901234,28000.00,16-MAR-18,104,10,1
+1104002,Akua,Dwomoh,Female,Ghanaian,East Legon,akua.dwomoh@gmail.com,248012345,29500.00,21-APR-19,104,10,1
+1105001,Yaw,Frimpong,Male,Ghanaian,East Legon,yaw.frimpong@gmail.com,597123456,65000.00,29-MAY-16,105,10,1
+1106001,Adjoa,Gyan,Female,Ghanaian,East Legon,adjoa.gyan@gmail.com,520234567,85000.00,03-JUL-18,106,10,1
+1107001,Kwabena,Kwame,Male,Ghanaian,East Legon,kwabena.kwame@gmail.com,560345678,70000.00,09-AUG-15,107,10,1
+1201001,Yaw,Osei,Male,Ghanaian,East Legon,yaw.osei@gmail.com,552567890,275000.00,25-NOV-14,201,20,1
+1202001,Ama,Poku,Female,Ghanaian,East Legon,ama.poku@gmail.com,553678901,50000.00,29-NOV-17,202,20,1
+1203001,Kwaku,Quansah,Male,Ghanaian,East Legon,kwaku.quansah@gmail.com,250789012,65000.00,31-DEC-18,203,20,1
+1204001,Adwoa,Sarpong,Female,Ghanaian,East Legon,adwoa.sarpong@gmail.com,250890123,70000.00,05-FEB-19,204,20,1
+1205001,Yaw,Tetteh,Male,Ghanaian,East Legon,yaw.tetteh@gmail.com,250901234,65000.00,11-FEB-20,205,20,1
+1206001,Akosua,Yeboah,Female,Ghanaian,East Legon,akosua.yeboah@gmail.com,550012345,75000.00,19-APR-19,206,20,1
+1207001,Kwame,Agyei,Male,Ghanaian,East Legon,kwame.agyei@gmail.com,553123456,50000.00,27-MAY-19,207,20,1
+1301001,Abena,Ansah,Female,Ghanaian,Madina,abena.ansah@gmail.com,521234567,120000.00,02-JUL-19,301,30,1
+1302001,Kwadwo,Boateng,Male,Ghanaian,East Legon,kwadwo.boateng@gmail.com,245345678,77000.00,09-AUG-21,302,30,1
+1303001,Adwoa,Cudjoe,Female,Ghanaian,Tema,adwoa.cudjoe@gmail.com,245456789,109000.00,17-SEP-18,303,30,1
+1304001,Kwaku,Danso,Male,Ghanaian,Ashaiman,kwaku.danso@gmail.com,552267890,112000.00,25-OCT-17,304,30,1
+1305001,Adwoa,Egyir,Female,Ghanaian,East Legon,adwoa.egyir@gmail.com,589678901,81000.00,29-NOV-18,305,30,1
+1306001,Kwame,Frimpong,Male,Ghanaian,Adenta,kwame.frimpong@gmail.com,256789012,60000.00,04-JAN-19,306,30,1
+1307001,Abena,Gyamfi,Female,Ghanaian,East Legon,abena.gyamfi@gmail.com,535890123,67500.00,11-FEB-19,307,30,1
+1401001,Kwadwo,Hanson,Male,Ghanaian,East Legon,kwadwo.hanson@gmail.com,248971234,142700.00,18-MAR-19,401,40,1
+1402001,Joshua,Ayivor,Male,Ghanaian,East Legon,joshua.ayivor@gmail.com,245012345,67000.00,26-APR-18,402,40,1
+1403001,Fatima,Kone,Female,Ivorian,Madina Estate,fatima.kone@gmail.com,545123456,61700.00,04-MAY-19,403,40,1
+1501001,Aisha,Bello,Female,Nigerian,East Legon,aisha.bello@gmail.com,509682879,85600.00,12-JUN-19,501,50,1
+1502001,Roch,Dankwa,Male,Ghanaian,East Legon,roch.dankwa@gmail.com,509682879,143000.00,20-JUL-19,502,50,1
+1503001,Richard,Asamoah,Male,Ghanaian,East Legon,richard.asamoah@gmail.com,578682879,145000.00,28-AUG-19,503,50,1
+1504001,Fausta,Amevor,Male,Ghanaian,East Legon,fausta.amevor@gmail.com,509637752,160000.00,05-SEP-19,504,50,1
+1505001,Emmanuel,Donkor,Male,Ghanaian,East Legon,emmanuel.donkor@gmail.com,587965410,187000.00,13-OCT-19,505,50,1
+1506001,David,Akuffo,Male,Ghanaian,East Legon,david.akuffo@gmail.com,200634708,242000.00,21-NOV-19,506,50,1
+1601001,Jessica,Annan,Female,Ghanaian,East Legon,jessica.annan@gmail.com,285634708,182000.00,29-NOV-19,601,60,1
+1602001,Eunice,Asiedu,Female,Ghanaian,Spintex Road,eunice.asiedu@gmail.com,502879752,130000.00,06-JAN-20,602,60,1
+1603001,Samuel,Atsu,Male,Ghanaian,Osu,samuel.atsu@gmail.com,213634708,112500.00,14-FEB-20,603,60,1
+1604001,Elorm,Kodjo,Male,Ghanaian,East Legon,elorm.kodjo@gmail.com,509637752,250000.00,24-MAR-20,604,60,1
+1605001,Caleb,Odom,Male,Ghanaian,East Legon,caleb.odom@gmail.com,587965410,125000.00,01-APR-20,605,60,1
+1606001,Winston,Kpadonou,Male,Beninois,Madina,winston.kpadonou@gmail.com,200634708,150000.00,09-MAY-20,606,60,1
