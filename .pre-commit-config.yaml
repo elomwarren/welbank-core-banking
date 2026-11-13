@@ -18,6 +18,8 @@ repos:
       - id: check-merge-conflict      # blocks leftover <<<<<<< markers
       - id: check-case-conflict       # blocks names that clash on case-insensitive disks
       - id: check-yaml
+        # Syntax only: Compose's !reset and !override tags (compose.prod.yaml) are valid there.
+        args: ["--unsafe"]
       - id: check-toml
       - id: check-xml                 # Liquibase controller.xml
       - id: check-executables-have-shebangs

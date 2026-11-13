@@ -1,0 +1,34 @@
+# compose.prod.yaml — production overrides, for a dedicated server.
+#
+#   docker compose -f compose.yaml -f compose.prod.yaml --profile app up -d --build
+#
+# Before the first start on the server:
+#   * ./scripts/init-secrets.sh ON THE SERVER (fresh passwords; never copy the laptop's);
+#   * a .env file with WELBANK_SITE_ADDRESS=<the server's DNS name>, whose DNS record
+#     points at the server, and ports 80 and 443 open: Caddy then obtains and renews
+#     an HTTPS certificate by itself;
+#   * backups copied off the server every day (see BACKUP_RECOVERY.md), and the
+#     keystore copy kept apart from them.
+services:
+  db:
+    # The database is reachable only inside the Docker network, never from outside.
+    ports: !reset []
+
+  api:
+    environment:
+      WELBANK_SECURE_COOKIES: "true"
+
+  web:
+    environment:
+      WELBANK_SITE_ADDRESS: ${WELBANK_SITE_ADDRESS:?set WELBANK_SITE_ADDRESS in .env}
+    ports: !override
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

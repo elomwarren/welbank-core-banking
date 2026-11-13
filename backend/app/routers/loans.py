@@ -68,7 +68,9 @@ class RepaymentIn(BaseModel):
 @router.get("/api/loans")
 def list_loans(
     db: Db,
-    status: str | None = Query(default="ACTIVE", max_length=12),
+    status: str = Query(
+        default="ACTIVE", max_length=12, description="ACTIVE, CLOSED, WRITTEN_OFF or ALL"
+    ),
     classification: str | None = Query(default=None, max_length=12),
     branch: str | None = Query(default=None, max_length=12),
     skip: int = Query(default=0, ge=0),
@@ -84,7 +86,7 @@ def list_loans(
            AND (:branch IS NULL OR b.branch_code = :branch)
          ORDER BY l.days_past_due DESC, l.loan_id DESC
          OFFSET :skip ROWS FETCH NEXT :take ROWS ONLY""",
-        status=status,
+        status=None if status == "ALL" else status,
         cls=classification,
         branch=branch,
         skip=skip,

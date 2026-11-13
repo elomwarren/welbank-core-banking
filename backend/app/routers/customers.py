@@ -19,7 +19,7 @@ import oracledb
 from fastapi import APIRouter, File, Form, Query, Response, UploadFile
 from pydantic import BaseModel, Field, model_validator
 
-from ..db import row, rows
+from ..db import row, rows, scalar
 from ..deps import Db, require_role
 from ..errors import ApiError, oracle_code
 from ..schemas import (
@@ -147,6 +147,12 @@ class AddressIn(BaseModel):
         """An address in Ghana names its region (one of the 16)."""
         if self.country == "GHA" and self.region_id is None:
             raise ValueError("choose the region of an address in Ghana")
+        if (
+            self.country == "GHA"
+            and self.address_type == "RESIDENTIAL"
+            and not self.digital_address
+        ):
+            raise ValueError("a home address in Ghana needs its GhanaPostGPS digital address")
         return self
 
 
@@ -237,6 +243,14 @@ def get_customer(customer_no: str, db: Db) -> dict[str, Any]:
     result: dict[str, Any] = {"customer": customer}
     for key, sql in _DETAIL_SQL.items():
         result[key] = rows(db, sql, **binds)
+    result["kyc_pending_approval"] = bool(
+        scalar(
+            db,
+            """SELECT COUNT(*) FROM approval_requests
+                WHERE customer_id = :id AND request_type = 'KYC_APPROVAL' AND status = 'PENDING'""",
+            **binds,
+        )
+    )
     try:
         result["identity"] = {key: rows(db, sql, **binds) for key, sql in _IDENTITY_SQL.items()}
     except oracledb.DatabaseError as exc:

@@ -40,6 +40,7 @@ database/
 │       ├── v_ledger_balance_check.sql  reconciliation: stored balances against the ledger
 │       ├── v_account_statement.sql     statement lines with a running balance
 │       └── v_pending_approvals.sql     the checkers' queue of pending requests
+├── security/         Roles, password profile, WB_APP, audit policies, employees' users (SYSDBA); ./scripts/db-security.sh
 ├── seed/             Synthetic data shaped by the 2021 census (see seed/README.md); ./scripts/db-seed.sh
 ├── tests/            Database tests: good rows must be accepted, bad rows rejected
 │   ├── run_tests.sh              Runs every *_test.sql as SYSDBA in WELBANK, adds up the results
