@@ -32,7 +32,13 @@ create_secret() {
     echo "kept existing: $file"
     return
   fi
-  generate_password > "$file"
+  if [[ "${2:-}" == with-symbol ]]; then
+    # Employees' passwords must also pass Oracle's ORA12C_VERIFY_FUNCTION, which
+    # wants a special character: 15 letters/digits and a final '#'.
+    printf '%s#' "$(generate_password | cut -c1-15)" > "$file"
+  else
+    generate_password > "$file"
+  fi
   # Readable by the container's "oracle" user (uid 54321), which is not you. The folder
   # above is private (700), so other users on this laptop still cannot reach the file.
   chmod 644 "$file"
@@ -43,3 +49,7 @@ create_secret() {
 create_secret oracle_pwd
 # WB_DEPLOY, the account that applies schema changes by proxying into WELBANK.
 create_secret wb_deploy_pwd
+# WB_APP, the web application's account; it reaches the database only by proxying into employees.
+create_secret wb_app_pwd
+# Development password of every seeded employee's Oracle user (scripts/db-security.sh).
+create_secret staff_demo_pwd with-symbol

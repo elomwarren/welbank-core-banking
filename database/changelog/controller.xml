@@ -27,6 +27,7 @@
   <include file="0007_transaction_limits_by_job.sql" relativeToChangelogFile="true"/>
   <include file="0008_bank_parameters.sql" relativeToChangelogFile="true"/>
   <include file="0009_loan_servicing.sql" relativeToChangelogFile="true"/>
+  <include file="0010_security_operations.sql" relativeToChangelogFile="true"/>
   <!-- New numbered migrations go HERE, above the code block. -->
 
   <!-- ============================ code ============================
@@ -53,5 +54,8 @@
   <include file="code/v_ledger_balance_check.sql" relativeToChangelogFile="true"/>
   <include file="code/v_account_statement.sql" relativeToChangelogFile="true"/>
   <include file="code/v_pending_approvals.sql" relativeToChangelogFile="true"/>
+  <include file="code/v_staff_directory.sql" relativeToChangelogFile="true"/>
+  <!-- Grants last: every object they name exists by then. -->
+  <include file="code/grants.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
