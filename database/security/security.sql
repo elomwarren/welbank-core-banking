@@ -72,7 +72,7 @@ ALTER PROFILE wb_employee LIMIT
   PASSWORD_REUSE_TIME      365         -- no reuse within a year ...
   PASSWORD_REUSE_MAX       6           -- ... nor within the last 6 passwords
   INACTIVE_ACCOUNT_TIME    120         -- unused for 120 days: locked
-  PASSWORD_VERIFY_FUNCTION ora12c_verify_function   -- 8+ characters, a letter and a digit, not the user name
+  PASSWORD_VERIFY_FUNCTION ora12c_verify_function   -- 8+ characters, a letter, a digit and (26ai) a special character
 ;
 
 -- -----------------------------------------------------------------------------
