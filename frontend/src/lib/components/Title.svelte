@@ -10,4 +10,5 @@
 	});
 </script>
 
-<svelte:head><title>{text} · WEL Bank</title></svelte:head>
+<!-- The bank's name comes first, so it stays visible in a narrow browser tab. -->
+<svelte:head><title>{text ? `WEL Bank · ${text}` : 'WEL Bank'}</title></svelte:head>

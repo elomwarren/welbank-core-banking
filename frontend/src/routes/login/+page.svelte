@@ -45,7 +45,7 @@
 	}
 </script>
 
-<svelte:head><title>Log in · WEL Bank</title></svelte:head>
+<svelte:head><title>WEL Bank · Log in</title></svelte:head>
 
 <div class="screen">
 	<div class="hero">
